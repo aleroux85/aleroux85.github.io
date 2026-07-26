@@ -1,5 +1,21 @@
 name: Deploy to GitHub Pages
 
+# One workflow, committed identically to both repos. It branches on
+# github.repository so the same file behaves correctly in each:
+#
+#   anroleroux/anroleroux.github.io  (PRODUCTION)
+#     - main            → build `make prd`, deploy to anroleroux.co.za
+#     - other branches  → build-check only, never deploys
+#
+#   anroleroux/staging.anroleroux    (STAGING)
+#     - other branches  → build `make dev`, deploy to staging.anroleroux.co.za
+#     - main            → promote: push HEAD to the production repo's main,
+#                         which triggers the production deploy above
+#
+# Keeping the file identical in both repos matters: promotion pushes staging's
+# main into prod's main, which carries this workflow file with it. If the two
+# ever diverged, a promotion would overwrite prod's workflow.
+
 on:
   push:
   workflow_dispatch:
@@ -10,12 +26,13 @@ permissions:
   id-token: write
 
 concurrency:
-  group: pages-${{ github.ref }}
+  group: pages-${{ github.repository }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
+  # PRODUCTION repo, main → build prod version and deploy to the live site.
   deploy-prod:
-    if: github.ref == 'refs/heads/main'
+    if: github.repository == 'anroleroux/anroleroux.github.io' && github.ref == 'refs/heads/main'
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -36,11 +53,9 @@ jobs:
       - uses: actions/deploy-pages@v5
         id: deployment
 
-  # Non-main branches: validate the build only. Never deploys, so branch
-  # pushes can't touch the live GitHub Pages site or its custom domain.
-  # For a visual preview of a branch, build locally with `make dev`.
+  # PRODUCTION repo, non-main branch → validate the build only, never deploys.
   build-check:
-    if: github.ref != 'refs/heads/main'
+    if: github.repository == 'anroleroux/anroleroux.github.io' && github.ref != 'refs/heads/main'
     permissions:
       contents: read
     runs-on: ubuntu-latest
@@ -52,3 +67,53 @@ jobs:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_PUBLISHABLE_KEY: ${{ secrets.SUPABASE_PUBLISHABLE_KEY }}
         run: make prd
+
+  # STAGING repo, non-main branch → build the dev preview and deploy it to
+  # staging.anroleroux.co.za. No secrets: `make dev` is the offline build.
+  deploy-staging:
+    if: github.repository == 'anroleroux/staging.anroleroux' && github.ref != 'refs/heads/main'
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Build dev version
+        run: make dev
+
+      - name: Set staging custom domain
+        run: echo "staging.anroleroux.co.za" > ui/dist/CNAME
+
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: ui/dist
+
+      - uses: actions/deploy-pages@v5
+        id: deployment
+
+  # STAGING repo, main → promote to production by pushing to the prod repo's
+  # main. The prod repo's own workflow (deploy-prod above) then builds and
+  # deploys. Auth is a write-enabled deploy key registered on the prod repo,
+  # with its private half stored as the PROD_DEPLOY_KEY secret in this repo.
+  # The push is a plain fast-forward; it will be rejected (not forced) if the
+  # histories have diverged, which is a deliberate safety signal.
+  promote-prod:
+    if: github.repository == 'anroleroux/staging.anroleroux' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Push to production repo
+        env:
+          PROD_DEPLOY_KEY: ${{ secrets.PROD_DEPLOY_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          printf '%s\n' "$PROD_DEPLOY_KEY" > ~/.ssh/prod_key
+          chmod 600 ~/.ssh/prod_key
+          ssh-keyscan github.com >> ~/.ssh/known_hosts 2>/dev/null
+          export GIT_SSH_COMMAND="ssh -i ~/.ssh/prod_key -o IdentitiesOnly=yes"
+          git remote add production git@github.com:anroleroux/anroleroux.github.io.git
+          git push production HEAD:main
