@@ -41,11 +41,7 @@
     .eig-flag { font-family: var(--mono); font-size: var(--ts13); align-self: center; }
     .eig-flag.ok  { color: #1c6b4a; }
     .eig-flag.bad { color: #8a3a13; }
-    .mat-eq { display: flex; flex-wrap: wrap; align-items: center; gap: var(--ms0); margin: var(--ms1) 0 0; }
-    .mat-out { display: inline-flex; align-items: stretch; gap: var(--ms-3); }
-    .mat-grid { display: grid; gap: var(--ms-2); padding: var(--ms-1) var(--ms0); }
-    .mat-num { font-family: var(--mono); font-size: var(--ts14); text-align: center; min-width: 3.4rem; color: var(--ink); font-variant-numeric: tabular-nums; }
-    .mat-eq-sign { font-family: var(--mono); font-size: var(--ts18); color: var(--ink-muted); }
+    .mat-eq { margin: var(--ms1) 0 0; overflow-x: auto; }
 
     /* ── Figure / plane diagram ───────────────────────────────────────── */
     .art-fig { margin: var(--ms3) 0; max-width: 66ch; }
@@ -63,8 +59,6 @@
     .cosmos .matrix-cells input:focus { border-color: var(--gold); }
     .cosmos .figure-numbering p { color: var(--bone-faint); }
     .cosmos .mat-label { color: var(--bone-muted); }
-    .cosmos .mat-num { color: var(--bone); }
-    .cosmos .mat-eq-sign { color: var(--bone-muted); }
     .cosmos .eig-flag.ok  { color: #8fbf9f; }
     .cosmos .eig-flag.bad { color: #d98a6a; }
   </style>
@@ -728,17 +722,24 @@ function renderAsy(container, isDark, A, x0) {
 
 function fmtCell(v) { var r = Math.round(v * 100) / 100; if (Object.is(r, -0)) r = 0; return String(r); }
 
-// The equation A x = y in matrix form with numbers filled in (no A, x, y).
-function eqHTML(A, x, y) {
-  function mat(cols, cells) {
-    var g = '<span class="mat-grid" style="grid-template-columns:repeat(' + cols + ',auto)">';
-    cells.forEach(function (c) { g += '<span class="mat-num">' + fmtCell(c) + '</span>'; });
-    g += '</span>';
-    return '<span class="mat-out"><span class="matrix-bracket left"></span>' + g +
-           '<span class="matrix-bracket right"></span></span>';
-  }
-  return mat(2, [A[0], A[1], A[2], A[3]]) + mat(1, [x[0], x[1]]) +
-         '<span class="mat-eq-sign">=</span>' + mat(1, [y[0], y[1]]);
+// The equation A x = y as LaTeX, numbers filled in (no A, x, y symbols).
+function eqLatex(A, x, y) {
+  function colv(v) { return fmtCell(v[0]) + ' \\\\ ' + fmtCell(v[1]); }
+  return '\\[' +
+    '\\begin{bmatrix} ' + fmtCell(A[0]) + ' & ' + fmtCell(A[1]) + ' \\\\ ' +
+                          fmtCell(A[2]) + ' & ' + fmtCell(A[3]) + ' \\end{bmatrix}' +
+    '\\begin{bmatrix} ' + colv(x) + ' \\end{bmatrix}' +
+    ' = ' +
+    '\\begin{bmatrix} ' + colv(y) + ' \\end{bmatrix}' +
+    '\\]';
+}
+
+// Set an element's LaTeX and (re-)typeset it with MathJax once available.
+function setEq(el, latex) {
+  var mj = window.MathJax;
+  if (mj && mj.typesetClear) { try { mj.typesetClear([el]); } catch (e) {} }
+  el.textContent = latex;
+  if (mj && mj.typesetPromise) { mj.typesetPromise([el]).catch(function () {}); }
 }
 
 function initVec(p, isDark) {
@@ -759,7 +760,7 @@ function initVec(p, isDark) {
     var sing = Math.abs(det) < 1e-9;
     flag.textContent = sing ? '(singular)' : '(non-singular)';
     flag.className = 'eig-flag ' + (sing ? 'bad' : 'ok');
-    eqEl.innerHTML = eqHTML(A, x, y);
+    setEq(eqEl, eqLatex(A, x, y));
     renderVecXform(figV, isDark, A, x);
     renderAsy(figA, isDark, A, x);
   }
