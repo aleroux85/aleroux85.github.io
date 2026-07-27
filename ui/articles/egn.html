@@ -34,6 +34,19 @@
     .matrix-cells input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
     .matrix-cells input { -moz-appearance: textfield; }
 
+    /* ── Vector I/O (intro) ───────────────────────────────────────────── */
+    .vec-io { display: flex; flex-wrap: wrap; align-items: center; gap: var(--ms2); }
+    .mat-label { font-family: var(--serif); font-style: italic; font-size: var(--ts18); color: var(--ink-muted); align-self: center; }
+    .matrix-cells.vec { grid-template-columns: auto; }
+    .eig-flag { font-family: var(--mono); font-size: var(--ts13); align-self: center; }
+    .eig-flag.ok  { color: #1c6b4a; }
+    .eig-flag.bad { color: #8a3a13; }
+    .mat-eq { display: flex; flex-wrap: wrap; align-items: center; gap: var(--ms0); margin: var(--ms1) 0 0; }
+    .mat-out { display: inline-flex; align-items: stretch; gap: var(--ms-3); }
+    .mat-grid { display: grid; gap: var(--ms-2); padding: var(--ms-1) var(--ms0); }
+    .mat-num { font-family: var(--mono); font-size: var(--ts14); text-align: center; min-width: 3.4rem; color: var(--ink); font-variant-numeric: tabular-nums; }
+    .mat-eq-sign { font-family: var(--mono); font-size: var(--ts18); color: var(--ink-muted); }
+
     /* ── Figure / plane diagram ───────────────────────────────────────── */
     .art-fig { margin: var(--ms3) 0; max-width: 66ch; }
     .charta svg { display: block; width: 100%; height: auto; max-width: 460px; margin: 0 auto; }
@@ -49,6 +62,11 @@
     .cosmos .matrix-cells input { border-color: var(--bone-fainter); background: rgba(236,226,200,0.04); color: var(--bone); }
     .cosmos .matrix-cells input:focus { border-color: var(--gold); }
     .cosmos .figure-numbering p { color: var(--bone-faint); }
+    .cosmos .mat-label { color: var(--bone-muted); }
+    .cosmos .mat-num { color: var(--bone); }
+    .cosmos .mat-eq-sign { color: var(--bone-muted); }
+    .cosmos .eig-flag.ok  { color: #8fbf9f; }
+    .cosmos .eig-flag.bad { color: #d98a6a; }
   </style>
 </head>
 <body>
@@ -102,7 +120,7 @@
     <header class="art-hero">
       <div class="art-eyebrow">§ work · mathematics</div>
       <h1 class="art-h1">Eigenvalues and <em>Eigenvectors</em></h1>
-      <p class="art-lede">Most directions get bent by a matrix. A special few are only stretched — and those reveal what the matrix really does.</p>
+      <p class="art-lede">Most directions get bent by a matrix. A special few are purely stretched — revealing what the matrix really does.</p>
     </header>
 
     <div class="art-meta-bar">
@@ -125,7 +143,40 @@
 
     <article class="art-body">
       <section>
-        <p>A matrix is a machine for moving the plane around. Feed it a vector and it hands back another vector — usually pointing somewhere new and stretched to a different length. But for almost any matrix there are a handful of special directions that come out pointing exactly the way they went in. Along those directions the matrix does nothing but scale: it makes vectors longer or shorter without turning them. These directions are the <em>eigenvectors</em>, and the amount each one is stretched is its <em>eigenvalue</em>.</p>
+        <p>Pre-multiplying a vector by a matrix stretches and rotates the vector. When considering a 2-by-2 matrix (\(\mathbf{A}\)) multiplied with a 2-by-1 vector (\(\mathbf{x}\)), a transformation of the vector (\(\mathbf{y}\)) is produced that can be displayed on a 2D plane.</p>
+        <p>\[\mathbf{A}\,\mathbf{x} = \mathbf{y}\]</p>
+        <div class="interactions">
+          <div class="vec-io">
+            <div class="matrix-input">
+              <span class="mat-label">A</span>
+              <span class="matrix-bracket left"></span>
+              <div class="matrix-cells">
+                <input id="alm-A-a" type="number" step="0.1" value="1" />
+                <input id="alm-A-b" type="number" step="0.1" value="0.4" />
+                <input id="alm-A-c" type="number" step="0.1" value="0.6" />
+                <input id="alm-A-d" type="number" step="0.1" value="2.2" />
+              </div>
+              <span class="matrix-bracket right"></span>
+              <span class="eig-flag" id="alm-A-flag"></span>
+            </div>
+            <div class="matrix-input">
+              <span class="mat-label">x</span>
+              <span class="matrix-bracket left"></span>
+              <div class="matrix-cells vec">
+                <input id="alm-x-0" type="number" step="0.1" value="1" />
+                <input id="alm-x-1" type="number" step="0.1" value="0.4" />
+              </div>
+              <span class="matrix-bracket right"></span>
+            </div>
+          </div>
+          <div class="mat-eq" id="alm-axy"></div>
+        </div>
+        <div class="art-fig"><div class="charta vecx-fig"></div></div>
+        <div class="figure-numbering ref num" data-fig="vector-xform" data-label="Figure"><p>How the matrix \(\mathbf{A}\) transforms the vector \(\mathbf{x}\) to \(\mathbf{y}\) by stretching and rotating it.</p></div>
+        <p>When repeated \(\mathbf{p}\) vectors are calculated and plotted, asymptotic behaviour starts to emerge. Consider the \(\mathbf{p}_i\) vectors, where \(i = \{0, 1, \ldots, 10\}\), drawn in <span class="figure-number" data-fid="egn-asy">figure</span> with the following equations.</p>
+        <p>\[\mathbf{y}_i = \mathbf{A}\,\mathbf{x}_i \qquad \mathbf{p}_i = \mathbf{y}_i - \mathbf{x}_i \qquad \mathbf{x}_{i+1} = \mathbf{y}_i\]</p>
+        <div class="art-fig"><div class="charta asy-fig"></div></div>
+        <div class="figure-numbering ref num" data-fig="egn-asy" data-label="Figure"><p>The asymptotic behaviour of the \(\mathbf{p}_i\) vectors. Drag \(\mathbf{x}_0\) to see how it behaves for different starting points.</p></div>
       </section>
 
       <section>
@@ -232,7 +283,7 @@
     <header class="art-hero">
       <div class="art-eyebrow">§ work · mathematics</div>
       <h1 class="art-h1">Eigenvalues and <em>Eigenvectors</em></h1>
-      <p class="art-lede">Most directions get bent by a matrix. A special few are only stretched — and those reveal what the matrix really does.</p>
+      <p class="art-lede">Most directions get bent by a matrix. A special few are purely stretched — revealing what the matrix really does.</p>
     </header>
 
     <div class="art-meta-bar">
@@ -255,7 +306,40 @@
 
     <article class="art-body">
       <section>
-        <p>A matrix is a machine for moving the plane around. Feed it a vector and it hands back another vector — usually pointing somewhere new and stretched to a different length. But for almost any matrix there are a handful of special directions that come out pointing exactly the way they went in. Along those directions the matrix does nothing but scale: it makes vectors longer or shorter without turning them. These directions are the <em>eigenvectors</em>, and the amount each one is stretched is its <em>eigenvalue</em>.</p>
+        <p>Pre-multiplying a vector by a matrix stretches and rotates the vector. When considering a 2-by-2 matrix (\(\mathbf{A}\)) multiplied with a 2-by-1 vector (\(\mathbf{x}\)), a transformation of the vector (\(\mathbf{y}\)) is produced that can be displayed on a 2D plane.</p>
+        <p>\[\mathbf{A}\,\mathbf{x} = \mathbf{y}\]</p>
+        <div class="interactions">
+          <div class="vec-io">
+            <div class="matrix-input">
+              <span class="mat-label">A</span>
+              <span class="matrix-bracket left"></span>
+              <div class="matrix-cells">
+                <input id="cos-A-a" type="number" step="0.1" value="1" />
+                <input id="cos-A-b" type="number" step="0.1" value="0.4" />
+                <input id="cos-A-c" type="number" step="0.1" value="0.6" />
+                <input id="cos-A-d" type="number" step="0.1" value="2.2" />
+              </div>
+              <span class="matrix-bracket right"></span>
+              <span class="eig-flag" id="cos-A-flag"></span>
+            </div>
+            <div class="matrix-input">
+              <span class="mat-label">x</span>
+              <span class="matrix-bracket left"></span>
+              <div class="matrix-cells vec">
+                <input id="cos-x-0" type="number" step="0.1" value="1" />
+                <input id="cos-x-1" type="number" step="0.1" value="0.4" />
+              </div>
+              <span class="matrix-bracket right"></span>
+            </div>
+          </div>
+          <div class="mat-eq" id="cos-axy"></div>
+        </div>
+        <div class="art-fig"><div class="charta vecx-fig"></div></div>
+        <div class="figure-numbering ref num" data-fig="vector-xform" data-label="Figure"><p>How the matrix \(\mathbf{A}\) transforms the vector \(\mathbf{x}\) to \(\mathbf{y}\) by stretching and rotating it.</p></div>
+        <p>When repeated \(\mathbf{p}\) vectors are calculated and plotted, asymptotic behaviour starts to emerge. Consider the \(\mathbf{p}_i\) vectors, where \(i = \{0, 1, \ldots, 10\}\), drawn in <span class="figure-number" data-fid="egn-asy">figure</span> with the following equations.</p>
+        <p>\[\mathbf{y}_i = \mathbf{A}\,\mathbf{x}_i \qquad \mathbf{p}_i = \mathbf{y}_i - \mathbf{x}_i \qquad \mathbf{x}_{i+1} = \mathbf{y}_i\]</p>
+        <div class="art-fig"><div class="charta asy-fig"></div></div>
+        <div class="figure-numbering ref num" data-fig="egn-asy" data-label="Figure"><p>The asymptotic behaviour of the \(\mathbf{p}_i\) vectors. Drag \(\mathbf{x}_0\) to see how it behaves for different starting points.</p></div>
       </section>
 
       <section>
@@ -530,10 +614,185 @@ function initEigen(p, isDark) {
   update();
 }
 
+// ── Intro: vector transform + asymptotic figures ──────────────
+function matVec(A, x) { return [A[0] * x[0] + A[1] * x[1], A[2] * x[0] + A[3] * x[1]]; }
+
+function planeCols(isDark) {
+  return {
+    grid: isDark ? 'rgba(236,226,200,0.10)' : 'rgba(28,22,16,0.08)',
+    axis: isDark ? 'rgba(236,226,200,0.40)' : 'rgba(28,22,16,0.35)',
+    text: isDark ? 'rgba(236,226,200,0.75)' : 'rgba(28,22,16,0.65)',
+    x:    isDark ? '#9ab7c4' : '#3a6b86',
+    y:    isDark ? '#d6ab5e' : '#8a3a13',
+    p:    isDark ? '#8fbf9f' : '#1c6b4a',
+    ring: isDark ? '#07080d' : '#f3ecd9'
+  };
+}
+
+// A blank plane with reusable drawing helpers, matching renderEigPlane's style.
+function buildPlane(container, s, cx, cy, W, H) {
+  container.innerHTML = '';
+  var svg = document.createElementNS(NS, 'svg');
+  svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
+  svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+  container.appendChild(svg);
+  function X(x) { return cx + x * s; }
+  function Y(y) { return cy - y * s; }
+  function el(name, attrs) {
+    var e = document.createElementNS(NS, name);
+    for (var k in attrs) e.setAttribute(k, attrs[k]);
+    svg.appendChild(e);
+    return e;
+  }
+  function seg(x1, y1, x2, y2, color, width, dash, opacity) {
+    var ln = el('line', { x1: X(x1), y1: Y(y1), x2: X(x2), y2: Y(y2), stroke: color, 'stroke-width': width });
+    if (dash) ln.setAttribute('stroke-dasharray', dash);
+    if (opacity != null) ln.setAttribute('opacity', opacity);
+    return ln;
+  }
+  function arrow(x1, y1, x2, y2, color, width, dash) {
+    var sx = X(x1), sy = Y(y1), ex = X(x2), ey = Y(y2);
+    var ln = el('line', { x1: sx, y1: sy, x2: ex, y2: ey, stroke: color, 'stroke-width': width });
+    if (dash) ln.setAttribute('stroke-dasharray', dash);
+    var len = Math.hypot(ex - sx, ey - sy);
+    if (len < 4) return;
+    var ang = Math.atan2(ey - sy, ex - sx), hl = 9, ha = 0.44;
+    el('polygon', { points: ex + ',' + ey + ' ' +
+      (ex - hl * Math.cos(ang - ha)) + ',' + (ey - hl * Math.sin(ang - ha)) + ' ' +
+      (ex - hl * Math.cos(ang + ha)) + ',' + (ey - hl * Math.sin(ang + ha)), fill: color });
+  }
+  function label(x, y, text, color, anchor, dx, dy) {
+    var t = el('text', { x: X(x) + (dx || 0), y: Y(y) + (dy || 0), fill: color,
+      'font-family': 'JetBrains Mono, monospace', 'font-size': 12, 'text-anchor': anchor || 'start' });
+    t.textContent = text;
+    return t;
+  }
+  function gridAxes(R, cols) {
+    for (var i = -Math.floor(R); i <= Math.floor(R); i++) {
+      if (i === 0) continue;
+      seg(i, -R, i, R, cols.grid, 1);
+      seg(-R, i, R, i, cols.grid, 1);
+    }
+    seg(-R, 0, R, 0, cols.axis, 1.4);
+    seg(0, -R, 0, R, cols.axis, 1.4);
+  }
+  return { svg: svg, X: X, Y: Y, el: el, seg: seg, arrow: arrow, label: label, gridAxes: gridAxes };
+}
+
+// Figure "vector-xform": x, y = A·x, and the connecting vector p = y − x.
+function renderVecXform(container, isDark, A, x) {
+  var cols = planeCols(isDark);
+  var W = 460, H = 460, cx = W / 2, cy = H / 2;
+  var y = matVec(A, x), p = [y[0] - x[0], y[1] - x[1]];
+  var m = Math.max(1, Math.abs(x[0]), Math.abs(x[1]), Math.abs(y[0]), Math.abs(y[1]));
+  var R = m * 1.25, s = (W / 2) / R;
+  var P = buildPlane(container, s, cx, cy, W, H);
+  P.gridAxes(R, cols);
+  P.arrow(0, 0, x[0], x[1], cols.x, 2.2);
+  P.arrow(0, 0, y[0], y[1], cols.y, 2.2);
+  P.arrow(x[0], x[1], y[0], y[1], cols.p, 2, '4 3');
+  P.label(x[0], x[1], 'x', cols.x, 'middle', 0, -8);
+  P.label(y[0], y[1], 'y', cols.y, 'middle', 0, -8);
+  P.label(x[0] + p[0] / 2, x[1] + p[1] / 2, 'p', cols.p, 'start', 8, 0);
+}
+
+// Figure "egn-asy": the trajectory x_{i+1} = A·x_i, drawn as the step vectors
+// p_i = y_i − x_i. As i grows the steps line up with the dominant eigen-
+// direction (dashed). x_0 is draggable; dragging writes back to the x inputs.
+function renderAsy(container, isDark, A, x0) {
+  var cols = planeCols(isDark);
+  var W = 460, H = 460, cx = W / 2, cy = H / 2;
+  var seq = [], xi = x0.slice();
+  for (var i = 0; i <= 10; i++) { var yi = matVec(A, xi); seq.push({ x: xi.slice(), y: yi.slice() }); xi = yi.slice(); }
+  // Frame the opening steps; later, growing steps run off-frame (clipped) along
+  // the eigen-direction — which is exactly the asymptote being shown.
+  var m = Math.max(Math.hypot(x0[0], x0[1]), Math.hypot(seq[0].y[0], seq[0].y[1]),
+                   Math.hypot(seq[1].y[0], seq[1].y[1]), 1.2);
+  var R = m * 1.4, s = (W / 2) / R;
+  var P = buildPlane(container, s, cx, cy, W, H);
+  P.gridAxes(R, cols);
+  var e = eigen2x2(A[0], A[1], A[2], A[3]);
+  if (!e.complex) {
+    var dom = Math.abs(e.pairs[0].lambda) >= Math.abs(e.pairs[1].lambda) ? e.pairs[0] : e.pairs[1];
+    P.seg(-dom.vx * R, -dom.vy * R, dom.vx * R, dom.vy * R, cols.text, 1, '2 4', 0.55);
+  }
+  seq.forEach(function (st, idx) {
+    var t = idx / 10;
+    P.arrow(st.x[0], st.x[1], st.y[0], st.y[1], cols.p, 1.3 + 1.5 * t);
+  });
+  container._tf = { cx: cx, cy: cy, s: s };
+  var h = P.el('circle', { cx: P.X(x0[0]), cy: P.Y(x0[1]), r: 7, fill: cols.x, stroke: cols.ring, 'stroke-width': 2 });
+  h.style.cursor = 'grab';
+  P.label(x0[0], x0[1], 'x₀', cols.x, 'start', 10, -6);
+}
+
+function fmtCell(v) { var r = Math.round(v * 100) / 100; if (Object.is(r, -0)) r = 0; return String(r); }
+
+// The equation A x = y in matrix form with numbers filled in (no A, x, y).
+function eqHTML(A, x, y) {
+  function mat(cols, cells) {
+    var g = '<span class="mat-grid" style="grid-template-columns:repeat(' + cols + ',auto)">';
+    cells.forEach(function (c) { g += '<span class="mat-num">' + fmtCell(c) + '</span>'; });
+    g += '</span>';
+    return '<span class="mat-out"><span class="matrix-bracket left"></span>' + g +
+           '<span class="matrix-bracket right"></span></span>';
+  }
+  return mat(2, [A[0], A[1], A[2], A[3]]) + mat(1, [x[0], x[1]]) +
+         '<span class="mat-eq-sign">=</span>' + mat(1, [y[0], y[1]]);
+}
+
+function initVec(p, isDark) {
+  function $id(id) { return document.getElementById(p + '-' + id); }
+  var Aa = $id('A-a'), Ab = $id('A-b'), Ac = $id('A-c'), Ad = $id('A-d');
+  var x0 = $id('x-0'), x1 = $id('x-1');
+  var flag = $id('A-flag'), eqEl = $id('axy');
+  var figV = document.querySelector('#' + p + '-layer .vecx-fig');
+  var figA = document.querySelector('#' + p + '-layer .asy-fig');
+  if (!Aa || !figV || !figA) return;
+
+  function update() {
+    var A = [parseFloat(Aa.value), parseFloat(Ab.value), parseFloat(Ac.value), parseFloat(Ad.value)];
+    var x = [parseFloat(x0.value), parseFloat(x1.value)];
+    if (A.concat(x).some(isNaN)) return;
+    var y = matVec(A, x);
+    var det = A[0] * A[3] - A[1] * A[2];
+    var sing = Math.abs(det) < 1e-9;
+    flag.textContent = sing ? '(singular)' : '(non-singular)';
+    flag.className = 'eig-flag ' + (sing ? 'bad' : 'ok');
+    eqEl.innerHTML = eqHTML(A, x, y);
+    renderVecXform(figV, isDark, A, x);
+    renderAsy(figA, isDark, A, x);
+  }
+
+  [Aa, Ab, Ac, Ad, x0, x1].forEach(function (inp) { inp.addEventListener('input', update); });
+
+  // Drag x_0 on the asymptotic figure → write back to the x inputs.
+  var dragging = false;
+  figA.addEventListener('pointerdown', function (ev) {
+    if (ev.target && ev.target.tagName === 'circle') { dragging = true; ev.preventDefault(); }
+  });
+  window.addEventListener('pointermove', function (ev) {
+    if (!dragging || !figA._tf) return;
+    var svg = figA.querySelector('svg'); if (!svg) return;
+    var rect = svg.getBoundingClientRect();
+    var tf = figA._tf;
+    var vx = (ev.clientX - rect.left) * (460 / rect.width);
+    var vy = (ev.clientY - rect.top) * (460 / rect.height);
+    x0.value = Math.round(((vx - tf.cx) / tf.s) * 100) / 100;
+    x1.value = Math.round(((tf.cy - vy) / tf.s) * 100) / 100;
+    update();
+  });
+  window.addEventListener('pointerup', function () { dragging = false; });
+
+  update();
+}
+
 (function () {
   var dark = (localStorage.getItem('sp-mode') === 'night');
   initEigen('alm', dark);   // almanac layer reflects the current daytime theme
   initEigen('cos', true);   // cosmos layer is always dark
+  initVec('alm', dark);
+  initVec('cos', true);
 })();
 </script>
 
