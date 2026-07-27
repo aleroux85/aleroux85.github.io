@@ -179,6 +179,7 @@ body { margin: 0; padding: 0; width: 100%; font-family: 'Inter', system-ui, sans
 /* ── Reactions widget (shared by almanac + cosmos footers) ─────── */
 .reactions {
   display: flex;
+  flex-wrap: wrap;
   gap: var(--ms0);
   justify-content: left;
   padding: 0 var(--ms6) var(--ms3);
@@ -633,4 +634,5 @@ a.alm-brand, a.cos-brand { text-decoration: none; color: inherit; }
   .alm-foot-links { justify-content: flex-start; }
   .cos-foot { grid-template-columns: 1fr; }
   .cos-foot-links { justify-content: flex-start; }
+  .reactions { flex-direction: column; align-items: flex-start; padding: 0 var(--ms1) var(--ms3); }
 }
