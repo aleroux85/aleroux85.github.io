@@ -661,8 +661,9 @@ function buildPlane(container, s, cx, cy, W, H) {
     t.textContent = text;
     return t;
   }
-  function gridAxes(R, cols) {
-    for (var i = -Math.floor(R); i <= Math.floor(R); i++) {
+  function gridAxes(R, cols, step) {
+    step = step || 1;
+    for (var i = -Math.floor(R / step) * step; i <= R; i += step) {
       if (i === 0) continue;
       seg(i, -R, i, R, cols.grid, 1);
       seg(-R, i, R, i, cols.grid, 1);
@@ -698,13 +699,11 @@ function renderAsy(container, isDark, A, x0) {
   var W = 460, H = 460, cx = W / 2, cy = H / 2;
   var seq = [], xi = x0.slice();
   for (var i = 0; i <= 10; i++) { var yi = matVec(A, xi); seq.push({ x: xi.slice(), y: yi.slice() }); xi = yi.slice(); }
-  // Frame the opening steps; later, growing steps run off-frame (clipped) along
-  // the eigen-direction — which is exactly the asymptote being shown.
-  var m = Math.max(Math.hypot(x0[0], x0[1]), Math.hypot(seq[0].y[0], seq[0].y[1]),
-                   Math.hypot(seq[1].y[0], seq[1].y[1]), 1.2);
-  var R = m * 1.4, s = (W / 2) / R;
+  // Fixed ±20 frame; growing steps run off-frame (clipped) along the
+  // eigen-direction — which is exactly the asymptote being shown.
+  var R = 20, s = (W / 2) / R;
   var P = buildPlane(container, s, cx, cy, W, H);
-  P.gridAxes(R, cols);
+  P.gridAxes(R, cols, 5);
   var e = eigen2x2(A[0], A[1], A[2], A[3]);
   if (!e.complex) {
     var dom = Math.abs(e.pairs[0].lambda) >= Math.abs(e.pairs[1].lambda) ? e.pairs[0] : e.pairs[1];
