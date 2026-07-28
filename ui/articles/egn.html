@@ -41,7 +41,6 @@
     .eig-flag { font-family: var(--mono); font-size: var(--ts13); align-self: center; }
     .eig-flag.ok  { color: #1c6b4a; }
     .eig-flag.bad { color: #8a3a13; }
-    .mat-eq { margin: var(--ms1) 0 0; overflow-x: auto; }
 
     /* ── Figure / plane diagram ───────────────────────────────────────── */
     .art-fig { margin: var(--ms3) 0; max-width: 66ch; }
@@ -163,7 +162,6 @@
               <span class="matrix-bracket right"></span>
             </div>
           </div>
-          <div class="mat-eq" id="alm-axy"></div>
         </div>
         <div class="art-fig"><div class="charta vecx-fig"></div></div>
         <div class="figure-numbering ref num" data-fig="vector-xform" data-label="Figure"><p>How the matrix \(\mathbf{A}\) transforms the vector \(\mathbf{x}\) to \(\mathbf{y}\) by stretching and rotating it.</p></div>
@@ -326,7 +324,6 @@
               <span class="matrix-bracket right"></span>
             </div>
           </div>
-          <div class="mat-eq" id="cos-axy"></div>
         </div>
         <div class="art-fig"><div class="charta vecx-fig"></div></div>
         <div class="figure-numbering ref num" data-fig="vector-xform" data-label="Figure"><p>How the matrix \(\mathbf{A}\) transforms the vector \(\mathbf{x}\) to \(\mathbf{y}\) by stretching and rotating it.</p></div>
@@ -719,33 +716,11 @@ function renderAsy(container, isDark, A, x0) {
   P.label(x0[0], x0[1], 'x₀', cols.x, 'start', 10, -6);
 }
 
-function fmtCell(v) { var r = Math.round(v * 100) / 100; if (Object.is(r, -0)) r = 0; return String(r); }
-
-// The equation A x = y as LaTeX, numbers filled in (no A, x, y symbols).
-function eqLatex(A, x, y) {
-  function colv(v) { return fmtCell(v[0]) + ' \\\\ ' + fmtCell(v[1]); }
-  return '\\[' +
-    '\\begin{bmatrix} ' + fmtCell(A[0]) + ' & ' + fmtCell(A[1]) + ' \\\\ ' +
-                          fmtCell(A[2]) + ' & ' + fmtCell(A[3]) + ' \\end{bmatrix}' +
-    '\\begin{bmatrix} ' + colv(x) + ' \\end{bmatrix}' +
-    ' = ' +
-    '\\begin{bmatrix} ' + colv(y) + ' \\end{bmatrix}' +
-    '\\]';
-}
-
-// Set an element's LaTeX and (re-)typeset it with MathJax once available.
-function setEq(el, latex) {
-  var mj = window.MathJax;
-  if (mj && mj.typesetClear) { try { mj.typesetClear([el]); } catch (e) {} }
-  el.textContent = latex;
-  if (mj && mj.typesetPromise) { mj.typesetPromise([el]).catch(function () {}); }
-}
-
 function initVec(p, isDark) {
   function $id(id) { return document.getElementById(p + '-' + id); }
   var Aa = $id('A-a'), Ab = $id('A-b'), Ac = $id('A-c'), Ad = $id('A-d');
   var x0 = $id('x-0'), x1 = $id('x-1');
-  var flag = $id('A-flag'), eqEl = $id('axy');
+  var flag = $id('A-flag');
   var figV = document.querySelector('#' + p + '-layer .vecx-fig');
   var figA = document.querySelector('#' + p + '-layer .asy-fig');
   if (!Aa || !figV || !figA) return;
@@ -754,12 +729,10 @@ function initVec(p, isDark) {
     var A = [parseFloat(Aa.value), parseFloat(Ab.value), parseFloat(Ac.value), parseFloat(Ad.value)];
     var x = [parseFloat(x0.value), parseFloat(x1.value)];
     if (A.concat(x).some(isNaN)) return;
-    var y = matVec(A, x);
     var det = A[0] * A[3] - A[1] * A[2];
     var sing = Math.abs(det) < 1e-9;
     flag.textContent = sing ? '(singular)' : '(non-singular)';
     flag.className = 'eig-flag ' + (sing ? 'bad' : 'ok');
-    setEq(eqEl, eqLatex(A, x, y));
     renderVecXform(figV, isDark, A, x);
     renderAsy(figA, isDark, A, x);
   }
