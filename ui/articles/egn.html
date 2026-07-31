@@ -41,6 +41,16 @@
     .eig-flag { font-family: var(--mono); font-size: var(--ts13); align-self: center; }
     .eig-flag.ok  { color: #1c6b4a; }
     .eig-flag.bad { color: #8a3a13; }
+    .mat-eq { margin: var(--ms1) 0; overflow-x: auto; }
+
+    /* ── Stiffness inputs ─────────────────────────────────────────────── */
+    .k-inputs { display: flex; flex-wrap: wrap; align-items: center; gap: var(--ms2); margin: var(--ms1) 0; }
+    .k-input { display: inline-flex; align-items: center; gap: var(--ms-2); font-family: var(--mono); font-size: var(--ts14); color: var(--ink-muted); }
+    .k-input input { width: 4rem; text-align: center; padding: 8px 10px; border: 1px solid var(--rule); border-radius: 6px; font: inherit; font-size: var(--ts14); background: rgba(28,22,16,0.03); color: var(--ink); }
+    .k-input input:focus { outline: none; border-color: var(--accent); }
+    .k-input input::-webkit-outer-spin-button,
+    .k-input input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+    .k-input input { -moz-appearance: textfield; }
 
     /* ── Figure / plane diagram ───────────────────────────────────────── */
     .art-fig { margin: var(--ms3) 0; max-width: 66ch; }
@@ -60,6 +70,9 @@
     .cosmos .mat-label { color: var(--bone-muted); }
     .cosmos .eig-flag.ok  { color: #8fbf9f; }
     .cosmos .eig-flag.bad { color: #d98a6a; }
+    .cosmos .k-input { color: var(--bone-muted); }
+    .cosmos .k-input input { border-color: var(--bone-fainter); background: rgba(236,226,200,0.04); color: var(--bone); }
+    .cosmos .k-input input:focus { border-color: var(--gold); }
   </style>
 </head>
 <body>
@@ -204,6 +217,37 @@
         <p>The vectors close to the eigenvectors align asymptotically with the eigenvector lines, pointing inward (to the origin, shrinking) or outward (stretching). The eigenvalues can also be seen as the \(\lambda\) values. Eigenvalues smaller than 1 result in shrinking eigenvector directions while \(\lambda > 1\) result in stretching directions.</p>
         <p>Each eigenvector direction encodes unique, independent, behaviour. Extracting them unlocks major advantages. First, eigenpairs describe the contribution of each behaviour and how it acts on each dimension of the system.</p>
         <p>All eigenpairs can fully describe a system and one can convert back and forth between system dynamics and its eigen representation. What's more, one can leave out behaviours with poor contributions when converting back to the actual system. This is how image and video compression is done.</p>
+      </section>
+
+      <section>
+        <h3 class="num">Mode Shapes</h3>
+        <p>Consider a spring system with two nodes, \(x_1\) and \(x_2\) on which forces \(f_1\) and \(f_2\) can be applied.</p>
+        <div class="art-fig"><div class="charta spring-fig"></div></div>
+        <div class="figure-numbering ref num" data-fig="spring-system" data-label="Figure"><p>Spring system with two nodes connected between 3 springs, constrained between fixed anchors.</p></div>
+        <p>The stiffness matrix is:</p>
+        <div class="interactions">
+          <div class="k-inputs">
+            <label class="k-input"><span>\(k_1\)</span><input id="alm-k1" type="number" step="0.1" value="1" /></label>
+            <label class="k-input"><span>\(k_2\)</span><input id="alm-k2" type="number" step="0.1" value="1" /></label>
+            <label class="k-input"><span>\(k_3\)</span><input id="alm-k3" type="number" step="0.1" value="1" /></label>
+          </div>
+        </div>
+        <div class="mat-eq" id="alm-K-eq"></div>
+        <p>The eigenvalues and eigenvectors are:</p>
+        <div class="interactions">
+          <p>mode 1 — eigenvalue \(\lambda_1\): <span class="eig-val" id="alm-K-l1"></span>, eigenvector \(\mathbf{v}_1\): <span class="eig-val" id="alm-K-v1"></span></p>
+          <p>mode 2 — eigenvalue \(\lambda_2\): <span class="eig-val" id="alm-K-l2"></span>, eigenvector \(\mathbf{v}_2\): <span class="eig-val" id="alm-K-v2"></span></p>
+        </div>
+        <div class="art-fig"><div class="charta gridK-fig"></div></div>
+        <div class="figure-numbering ref num" data-fig="grid-xform-K" data-label="Figure"><p>The matrix \(\mathbf{K}\) acting on a grid of points.</p></div>
+        <p>The system has two unknowns (\(x_1\) and \(x_2\)), two dimensions it can move in, results in a 2-by-2 matrix and has two eigenpairs. The two eigenvectors are the two mode shapes the system has and can be seen in <span class="figure-number" data-fid="fig-mode-shapes">figure</span>.</p>
+        <div class="art-fig"><div class="charta modeshape-fig"></div></div>
+        <div class="figure-numbering ref num" data-fig="fig-mode-shapes" data-label="Figure"><p>The mode shapes.</p></div>
+        <p>The interesting observation is that every deformation of the system can be encoded by adding a portion of each mode shape.</p>
+        <p>\[\mathbf{x} = c_1 \mathbf{v}_1 + c_2 \mathbf{v}_2\]</p>
+        <p>A last note is that, when looking at strain energy:</p>
+        <p>\[U = \tfrac{1}{2}\,\mathbf{x}^{\mathsf{T}} \mathbf{K}\, \mathbf{x}\]</p>
+        <p>It is always the smallest when \(\mathbf{x}\) lies on \(\mathbf{v}_1\) and the largest when on \(\mathbf{v}_2\) for the same length \(\mathbf{x}\) (\(\lVert \mathbf{x} \rVert\)). The eigenvector associated with the smallest eigenvalue gives the minimum strain energy while the largest eigenvalue gives the maximum strain energy. Therefore, for a perturbation or a stretch-and-release action on a system, the high energy demand (high eigenvalue) mode shape has the lowest contribution to how the system reacts. Ignoring them can still provide good approximations of system behaviour.</p>
       </section>
 
       <section>
@@ -363,6 +407,37 @@
         <p>The vectors close to the eigenvectors align asymptotically with the eigenvector lines, pointing inward (to the origin, shrinking) or outward (stretching). The eigenvalues can also be seen as the \(\lambda\) values. Eigenvalues smaller than 1 result in shrinking eigenvector directions while \(\lambda > 1\) result in stretching directions.</p>
         <p>Each eigenvector direction encodes unique, independent, behaviour. Extracting them unlocks major advantages. First, eigenpairs describe the contribution of each behaviour and how it acts on each dimension of the system.</p>
         <p>All eigenpairs can fully describe a system and one can convert back and forth between system dynamics and its eigen representation. What's more, one can leave out behaviours with poor contributions when converting back to the actual system. This is how image and video compression is done.</p>
+      </section>
+
+      <section>
+        <h3 class="num">Mode Shapes</h3>
+        <p>Consider a spring system with two nodes, \(x_1\) and \(x_2\) on which forces \(f_1\) and \(f_2\) can be applied.</p>
+        <div class="art-fig"><div class="charta spring-fig"></div></div>
+        <div class="figure-numbering ref num" data-fig="spring-system" data-label="Figure"><p>Spring system with two nodes connected between 3 springs, constrained between fixed anchors.</p></div>
+        <p>The stiffness matrix is:</p>
+        <div class="interactions">
+          <div class="k-inputs">
+            <label class="k-input"><span>\(k_1\)</span><input id="cos-k1" type="number" step="0.1" value="1" /></label>
+            <label class="k-input"><span>\(k_2\)</span><input id="cos-k2" type="number" step="0.1" value="1" /></label>
+            <label class="k-input"><span>\(k_3\)</span><input id="cos-k3" type="number" step="0.1" value="1" /></label>
+          </div>
+        </div>
+        <div class="mat-eq" id="cos-K-eq"></div>
+        <p>The eigenvalues and eigenvectors are:</p>
+        <div class="interactions">
+          <p>mode 1 — eigenvalue \(\lambda_1\): <span class="eig-val" id="cos-K-l1"></span>, eigenvector \(\mathbf{v}_1\): <span class="eig-val" id="cos-K-v1"></span></p>
+          <p>mode 2 — eigenvalue \(\lambda_2\): <span class="eig-val" id="cos-K-l2"></span>, eigenvector \(\mathbf{v}_2\): <span class="eig-val" id="cos-K-v2"></span></p>
+        </div>
+        <div class="art-fig"><div class="charta gridK-fig"></div></div>
+        <div class="figure-numbering ref num" data-fig="grid-xform-K" data-label="Figure"><p>The matrix \(\mathbf{K}\) acting on a grid of points.</p></div>
+        <p>The system has two unknowns (\(x_1\) and \(x_2\)), two dimensions it can move in, results in a 2-by-2 matrix and has two eigenpairs. The two eigenvectors are the two mode shapes the system has and can be seen in <span class="figure-number" data-fid="fig-mode-shapes">figure</span>.</p>
+        <div class="art-fig"><div class="charta modeshape-fig"></div></div>
+        <div class="figure-numbering ref num" data-fig="fig-mode-shapes" data-label="Figure"><p>The mode shapes.</p></div>
+        <p>The interesting observation is that every deformation of the system can be encoded by adding a portion of each mode shape.</p>
+        <p>\[\mathbf{x} = c_1 \mathbf{v}_1 + c_2 \mathbf{v}_2\]</p>
+        <p>A last note is that, when looking at strain energy:</p>
+        <p>\[U = \tfrac{1}{2}\,\mathbf{x}^{\mathsf{T}} \mathbf{K}\, \mathbf{x}\]</p>
+        <p>It is always the smallest when \(\mathbf{x}\) lies on \(\mathbf{v}_1\) and the largest when on \(\mathbf{v}_2\) for the same length \(\mathbf{x}\) (\(\lVert \mathbf{x} \rVert\)). The eigenvector associated with the smallest eigenvalue gives the minimum strain energy while the largest eigenvalue gives the maximum strain energy. Therefore, for a perturbation or a stretch-and-release action on a system, the high energy demand (high eigenvalue) mode shape has the lowest contribution to how the system reacts. Ignoring them can still provide good approximations of system behaviour.</p>
       </section>
 
       <section>
@@ -754,12 +829,143 @@ function initVec(p, isDark) {
   update();
 }
 
+// ── Mode Shapes: spring system, stiffness matrix, mode shapes ──
+function svgEl(parent, name, attrs) {
+  var e = document.createElementNS(NS, name);
+  for (var k in attrs) e.setAttribute(k, attrs[k]);
+  parent.appendChild(e);
+  return e;
+}
+function svgText(parent, x, y, t, fill, anchor, size) {
+  var e = svgEl(parent, 'text', { x: x, y: y, fill: fill,
+    'font-family': 'JetBrains Mono, monospace', 'font-size': size || 12, 'text-anchor': anchor || 'middle' });
+  e.textContent = t;
+  return e;
+}
+function svgArrow(parent, x1, y1, x2, y2, color, width) {
+  svgEl(parent, 'line', { x1: x1, y1: y1, x2: x2, y2: y2, stroke: color, 'stroke-width': width || 2 });
+  var len = Math.hypot(x2 - x1, y2 - y1);
+  if (len < 4) return;
+  var ang = Math.atan2(y2 - y1, x2 - x1), hl = 8, ha = 0.5;
+  svgEl(parent, 'polygon', { points: x2 + ',' + y2 + ' ' +
+    (x2 - hl * Math.cos(ang - ha)) + ',' + (y2 - hl * Math.sin(ang - ha)) + ' ' +
+    (x2 - hl * Math.cos(ang + ha)) + ',' + (y2 - hl * Math.sin(ang + ha)), fill: color });
+}
+
+// Re-typeset an element's LaTeX with MathJax once it is available.
+function setEq(el, latex) {
+  var mj = window.MathJax;
+  if (mj && mj.typesetClear) { try { mj.typesetClear([el]); } catch (e) {} }
+  el.textContent = latex;
+  if (mj && mj.typesetPromise) { mj.typesetPromise([el]).catch(function () {}); }
+}
+
+function springPath(x1, x2, y, coils, amp) {
+  var lead = 8, n = coils * 2, seg = ((x2 - x1) - 2 * lead) / n;
+  var d = 'M ' + x1 + ' ' + y + ' L ' + (x1 + lead) + ' ' + y;
+  for (var i = 0; i < n; i++) {
+    d += ' L ' + (x1 + lead + seg * (i + 0.5)) + ' ' + (y + (i % 2 === 0 ? -amp : amp));
+  }
+  return d + ' L ' + (x2 - lead) + ' ' + y + ' L ' + x2 + ' ' + y;
+}
+
+// Schematic of the wall–k1–x1–k2–x2–k3–wall spring chain with forces f1, f2.
+function renderSpring(container, isDark) {
+  container.innerHTML = '';
+  var W = 480, H = 170;
+  var svg = svgEl(container, 'svg', { viewBox: '0 0 ' + W + ' ' + H, preserveAspectRatio: 'xMidYMid meet' });
+  var ink   = isDark ? 'rgba(236,226,200,0.85)' : 'rgba(28,22,16,0.8)';
+  var faint = isDark ? 'rgba(236,226,200,0.45)' : 'rgba(28,22,16,0.45)';
+  var force = isDark ? '#d6ab5e' : '#8a3a13';
+  var node  = isDark ? '#9ab7c4' : '#3a6b86';
+  var y = 95, wallL = 24, wallR = 456, n1 = 190, n2 = 306, nodeW = 30, nodeH = 46;
+  function wall(x, dir) {
+    svgEl(svg, 'line', { x1: x, y1: y - 42, x2: x, y2: y + 42, stroke: ink, 'stroke-width': 2.5 });
+    for (var i = -36; i <= 36; i += 12) svgEl(svg, 'line', { x1: x, y1: y + i, x2: x + dir * 10, y2: y + i + dir * 10, stroke: faint, 'stroke-width': 1 });
+  }
+  wall(wallL, -1); wall(wallR, 1);
+  function spring(a, b) { svgEl(svg, 'path', { d: springPath(a, b, y, 6, 9), fill: 'none', stroke: ink, 'stroke-width': 1.6 }); }
+  spring(wallL, n1 - nodeW / 2); spring(n1 + nodeW / 2, n2 - nodeW / 2); spring(n2 + nodeW / 2, wallR);
+  function nodeRect(cx) { svgEl(svg, 'rect', { x: cx - nodeW / 2, y: y - nodeH / 2, width: nodeW, height: nodeH, rx: 4, fill: 'none', stroke: node, 'stroke-width': 2 }); }
+  nodeRect(n1); nodeRect(n2);
+  svgText(svg, (wallL + n1 - nodeW / 2) / 2, y - 22, 'k₁', faint);
+  svgText(svg, (n1 + n2) / 2, y - 22, 'k₂', faint);
+  svgText(svg, (n2 + nodeW / 2 + wallR) / 2, y - 22, 'k₃', faint);
+  svgText(svg, n1, y + nodeH / 2 + 18, 'x₁', ink);
+  svgText(svg, n2, y + nodeH / 2 + 18, 'x₂', ink);
+  svgArrow(svg, n1, y - nodeH / 2 - 16, n1 + 34, y - nodeH / 2 - 16, force, 2.2);
+  svgText(svg, n1 + 44, y - nodeH / 2 - 12, 'f₁', force, 'start');
+  svgArrow(svg, n2, y - nodeH / 2 - 16, n2 + 34, y - nodeH / 2 - 16, force, 2.2);
+  svgText(svg, n2 + 44, y - nodeH / 2 - 12, 'f₂', force, 'start');
+}
+
+// Two mode shapes: each node displaced by its eigenvector component.
+function renderModeShapes(container, isDark, modes) {
+  container.innerHTML = '';
+  var W = 460, H = 250;
+  var svg = svgEl(container, 'svg', { viewBox: '0 0 ' + W + ' ' + H, preserveAspectRatio: 'xMidYMid meet' });
+  var txt  = isDark ? 'rgba(236,226,200,0.8)'  : 'rgba(28,22,16,0.7)';
+  var base = isDark ? 'rgba(236,226,200,0.3)'  : 'rgba(28,22,16,0.25)';
+  var dot  = isDark ? '#ece2c8' : '#1c1610';
+  var arr  = isDark ? '#d6ab5e' : '#8a3a13';
+  modes.forEach(function (m, idx) {
+    var cy = 70 + idx * 110, restA = 160, restB = 300, sc = 55;
+    svgEl(svg, 'line', { x1: 70, y1: cy, x2: 390, y2: cy, stroke: base, 'stroke-width': 1, 'stroke-dasharray': '2 3' });
+    svgEl(svg, 'circle', { cx: restA, cy: cy, r: 5, fill: 'none', stroke: base, 'stroke-width': 1.5 });
+    svgEl(svg, 'circle', { cx: restB, cy: cy, r: 5, fill: 'none', stroke: base, 'stroke-width': 1.5 });
+    svgArrow(svg, restA, cy, restA + m.vx * sc, cy, arr, 2.4);
+    svgArrow(svg, restB, cy, restB + m.vy * sc, cy, arr, 2.4);
+    svgEl(svg, 'circle', { cx: restA + m.vx * sc, cy: cy, r: 6, fill: dot });
+    svgEl(svg, 'circle', { cx: restB + m.vy * sc, cy: cy, r: 6, fill: dot });
+    svgText(svg, 70, cy - 32, 'Mode ' + (idx + 1) + '  λ = ' + fmtNum(m.lambda), txt, 'start');
+    svgText(svg, restA, cy + 24, 'x₁', txt, 'middle', 11);
+    svgText(svg, restB, cy + 24, 'x₂', txt, 'middle', 11);
+  });
+}
+
+function initModeShapes(p, isDark) {
+  function $id(id) { return document.getElementById(p + '-' + id); }
+  var k1 = $id('k1'), k2 = $id('k2'), k3 = $id('k3'), Keq = $id('K-eq');
+  var l1 = $id('K-l1'), l2 = $id('K-l2'), v1 = $id('K-v1'), v2 = $id('K-v2');
+  var springFig = document.querySelector('#' + p + '-layer .spring-fig');
+  var gridKFig  = document.querySelector('#' + p + '-layer .gridK-fig');
+  var modeFig   = document.querySelector('#' + p + '-layer .modeshape-fig');
+  if (!k1 || !gridKFig) return;
+
+  renderSpring(springFig, isDark);   // schematic — independent of k values
+
+  function update() {
+    var a = parseFloat(k1.value), b = parseFloat(k2.value), c = parseFloat(k3.value);
+    if ([a, b, c].some(isNaN)) return;
+    var Ka = a + b, Kb = -b, Kc = -b, Kd = b + c;
+    setEq(Keq, '\\[\\mathbf{K} = \\begin{bmatrix} k_1+k_2 & -k_2 \\\\ -k_2 & k_2+k_3 \\end{bmatrix} = ' +
+      '\\begin{bmatrix} ' + fmtNum(Ka) + ' & ' + fmtNum(Kb) + ' \\\\ ' + fmtNum(Kc) + ' & ' + fmtNum(Kd) + ' \\end{bmatrix}\\]');
+    var e = eigen2x2(Ka, Kb, Kc, Kd);
+    renderEigPlane(gridKFig, isDark, Ka, Kb, Kc, Kd);
+    if (e.complex || e.pairs.length < 2) {   // never for a symmetric K, but stay safe
+      l1.textContent = l2.textContent = v1.textContent = v2.textContent = '—';
+      return;
+    }
+    // order the pair with the smaller eigenvalue first (the soft mode)
+    var lo = e.pairs[0].lambda <= e.pairs[1].lambda ? e.pairs[0] : e.pairs[1];
+    var hi = lo === e.pairs[0] ? e.pairs[1] : e.pairs[0];
+    l1.textContent = fmtNum(lo.lambda); v1.textContent = '(' + fmtNum(lo.vx) + ', ' + fmtNum(lo.vy) + ')';
+    l2.textContent = fmtNum(hi.lambda); v2.textContent = '(' + fmtNum(hi.vx) + ', ' + fmtNum(hi.vy) + ')';
+    renderModeShapes(modeFig, isDark, [lo, hi]);
+  }
+
+  [k1, k2, k3].forEach(function (inp) { inp.addEventListener('input', update); });
+  update();
+}
+
 (function () {
   var dark = (localStorage.getItem('sp-mode') === 'night');
   initEigen('alm', dark);   // almanac layer reflects the current daytime theme
   initEigen('cos', true);   // cosmos layer is always dark
   initVec('alm', dark);
   initVec('cos', true);
+  initModeShapes('alm', dark);
+  initModeShapes('cos', true);
 })();
 </script>
 
