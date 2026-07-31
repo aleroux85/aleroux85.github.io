@@ -308,8 +308,10 @@
       </section>
 
       <section>
-        <h2 class="num">Solving for the Eigenpairs</h2>
-        <p>For a \(2\times2\) matrix, the determinant \(\det(\mathbf{A} - \lambda\mathbf{I})\) expands into a tidy quadratic, the <em>characteristic equation</em>:</p>
+        <h2 class="num">Computing Eigenpairs</h2>
+        <p>Continuing from the equation</p>
+        <p>\[\det(\mathbf{A} - \lambda\mathbf{I}) = 0\]</p>
+        <p>For a \(2\times2\) matrix this expands into a tidy quadratic, the <em>characteristic equation</em>:</p>
         <p>\[\det\begin{bmatrix} a-\lambda & b \\ c & d-\lambda \end{bmatrix} = (a-\lambda)(d-\lambda) - bc = \lambda^2 - (a+d)\,\lambda + (ad - bc) = 0\]</p>
         <p>The coefficients are two familiar quantities: the <em>trace</em> \(T = a + d\) (the sum down the diagonal) and the <em>determinant</em> \(D = ad - bc\). So the eigenvalues are simply the roots of</p>
         <p>\[\lambda^2 - T\lambda + D = 0 \quad\Longrightarrow\quad \lambda = \frac{T \pm \sqrt{T^2 - 4D}}{2}\]</p>
@@ -325,15 +327,13 @@
           <p>eigenvector \(\mathbf{v}_1\): <span class="eig-val" id="alm-out-v1"></span></p>
           <p>eigenvector \(\mathbf{v}_2\): <span class="eig-val" id="alm-out-v2"></span></p>
         </div>
-        <p>These are exactly the highlighted lines drawn on Figure <span class="figure-number" data-fid="grid-xform"></span>. On that figure, every grid point sitting on a highlighted line is sent straight along the same line, to \(\lambda\) times its distance from the origin — its arrow never veers sideways. That collinearity, holding for every choice of matrix, is the whole point — eigenvectors are the directions of pure scaling.</p>
-        <div class="insight block ref num" data-label="Insight">
-          <h4></h4>
-          <p>When the discriminant \(T^2 - 4D\) is negative, the square root is imaginary and the eigenvalues are complex. Geometrically the matrix is rotating the plane, so <em>no</em> real direction is left pointing the same way — there are no real eigen-directions to draw. Try \(\mathbf{A} = \begin{bmatrix} 0 & -1 \\ 1 & 0\end{bmatrix}\), a 90° rotation, to see this.</p>
-        </div>
+        <p>When the discriminant \(T^2 - 4D\) is negative, the square root is imaginary and the eigenvalues are complex. Geometrically the matrix is rotating the plane, so no real direction is left pointing the same way — there are no real eigen-directions to draw.</p>
       </section>
 
       <section>
         <h2 class="num">Conclusion</h2>
+        <p>Types of matrices deserve a re/visit in the context of eigenvalues and eigenvectors. The identity matrix is an extreme case since it does nothing to a vector, thus \(\mathbf{A}\mathbf{v} = \mathbf{I}\mathbf{v} = 1\mathbf{v}\). Every vector \(\mathbf{v}\) is an eigenvector but there is only one eigenvalue \(\lambda = 1\). Similarly, a matrix with 2 on the diagonal and zero everywhere else (\(\mathbf{A} = 2\mathbf{I}\)) purely scales everything by 2. Every vector is still an eigenvector and there is only one eigenvalue \(\lambda = 2\).</p>
+        <p>If the matrix is diagonal (just like \(\mathbf{I}\) and \(2\mathbf{I}\)) but have different values on the diagonal, \(n\) eigenpairs suddenly emerge for an \(n\)-by-\(n\) matrix. The eigenvalues are the values on the diagonal and the eigenvector point in the directions of the matrix dimensions. When the matrix has off-diagonal entries but is still symmetric \(\mathbf{A} = \mathbf{A}^{\mathsf{T}}\), it has \(n\) eigenvectors that are perpendicular. If a matrix is singular, \(\det(\mathbf{A}) = 0\), at least one eigenvalue is zero.</p>
         <p>Eigenvalues and eigenvectors strip a matrix down to its essence. Buried inside all the rotation and shear are a few skeleton directions along which the matrix is nothing more than a stretch, and a set of numbers saying by how much. Once those are known, the matrix becomes easy to reason about — repeated application, stability, resonance and principal axes all fall out of the eigenpairs. The humble equation \(\mathbf{A}\mathbf{v} = \lambda\mathbf{v}\) turns out to be one of the most useful sentences in all of applied mathematics.</p>
       </section>
     </article>
@@ -541,8 +541,10 @@
       </section>
 
       <section>
-        <h2 class="num">Solving for the Eigenpairs</h2>
-        <p>For a \(2\times2\) matrix, the determinant \(\det(\mathbf{A} - \lambda\mathbf{I})\) expands into a tidy quadratic, the <em>characteristic equation</em>:</p>
+        <h2 class="num">Computing Eigenpairs</h2>
+        <p>Continuing from the equation</p>
+        <p>\[\det(\mathbf{A} - \lambda\mathbf{I}) = 0\]</p>
+        <p>For a \(2\times2\) matrix this expands into a tidy quadratic, the <em>characteristic equation</em>:</p>
         <p>\[\det\begin{bmatrix} a-\lambda & b \\ c & d-\lambda \end{bmatrix} = (a-\lambda)(d-\lambda) - bc = \lambda^2 - (a+d)\,\lambda + (ad - bc) = 0\]</p>
         <p>The coefficients are two familiar quantities: the <em>trace</em> \(T = a + d\) (the sum down the diagonal) and the <em>determinant</em> \(D = ad - bc\). So the eigenvalues are simply the roots of</p>
         <p>\[\lambda^2 - T\lambda + D = 0 \quad\Longrightarrow\quad \lambda = \frac{T \pm \sqrt{T^2 - 4D}}{2}\]</p>
@@ -558,15 +560,13 @@
           <p>eigenvector \(\mathbf{v}_1\): <span class="eig-val" id="cos-out-v1"></span></p>
           <p>eigenvector \(\mathbf{v}_2\): <span class="eig-val" id="cos-out-v2"></span></p>
         </div>
-        <p>These are exactly the highlighted lines drawn on Figure <span class="figure-number" data-fid="grid-xform"></span>. On that figure, every grid point sitting on a highlighted line is sent straight along the same line, to \(\lambda\) times its distance from the origin — its arrow never veers sideways. That collinearity, holding for every choice of matrix, is the whole point — eigenvectors are the directions of pure scaling.</p>
-        <div class="insight block ref num" data-label="Insight">
-          <h4></h4>
-          <p>When the discriminant \(T^2 - 4D\) is negative, the square root is imaginary and the eigenvalues are complex. Geometrically the matrix is rotating the plane, so <em>no</em> real direction is left pointing the same way — there are no real eigen-directions to draw. Try \(\mathbf{A} = \begin{bmatrix} 0 & -1 \\ 1 & 0\end{bmatrix}\), a 90° rotation, to see this.</p>
-        </div>
+        <p>When the discriminant \(T^2 - 4D\) is negative, the square root is imaginary and the eigenvalues are complex. Geometrically the matrix is rotating the plane, so no real direction is left pointing the same way — there are no real eigen-directions to draw.</p>
       </section>
 
       <section>
         <h2 class="num">Conclusion</h2>
+        <p>Types of matrices deserve a re/visit in the context of eigenvalues and eigenvectors. The identity matrix is an extreme case since it does nothing to a vector, thus \(\mathbf{A}\mathbf{v} = \mathbf{I}\mathbf{v} = 1\mathbf{v}\). Every vector \(\mathbf{v}\) is an eigenvector but there is only one eigenvalue \(\lambda = 1\). Similarly, a matrix with 2 on the diagonal and zero everywhere else (\(\mathbf{A} = 2\mathbf{I}\)) purely scales everything by 2. Every vector is still an eigenvector and there is only one eigenvalue \(\lambda = 2\).</p>
+        <p>If the matrix is diagonal (just like \(\mathbf{I}\) and \(2\mathbf{I}\)) but have different values on the diagonal, \(n\) eigenpairs suddenly emerge for an \(n\)-by-\(n\) matrix. The eigenvalues are the values on the diagonal and the eigenvector point in the directions of the matrix dimensions. When the matrix has off-diagonal entries but is still symmetric \(\mathbf{A} = \mathbf{A}^{\mathsf{T}}\), it has \(n\) eigenvectors that are perpendicular. If a matrix is singular, \(\det(\mathbf{A}) = 0\), at least one eigenvalue is zero.</p>
         <p>Eigenvalues and eigenvectors strip a matrix down to its essence. Buried inside all the rotation and shear are a few skeleton directions along which the matrix is nothing more than a stretch, and a set of numbers saying by how much. Once those are known, the matrix becomes easy to reason about — repeated application, stability, resonance and principal axes all fall out of the eigenpairs. The humble equation \(\mathbf{A}\mathbf{v} = \lambda\mathbf{v}\) turns out to be one of the most useful sentences in all of applied mathematics.</p>
       </section>
     </article>
