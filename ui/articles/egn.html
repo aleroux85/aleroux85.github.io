@@ -52,6 +52,16 @@
     .k-input input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
     .k-input input { -moz-appearance: textfield; }
 
+    /* ── PC-loadings table ────────────────────────────────────────────── */
+    .art-table { margin: var(--ms3) 0; max-width: 66ch; overflow-x: auto; }
+    .pc-table { border-collapse: collapse; width: 100%; font-family: var(--mono); font-size: var(--ts13); }
+    .pc-table th, .pc-table td { padding: var(--ms-2) var(--ms0); text-align: center; border-bottom: 1px solid var(--rule); white-space: nowrap; }
+    .pc-table th { color: var(--ink-faint); font-weight: 500; text-transform: uppercase; letter-spacing: 0.8px; font-size: var(--ts11); }
+    .pc-table td { color: var(--ink-muted); font-variant-numeric: tabular-nums; }
+    .pc-table th:first-child, .pc-table td:first-child { text-align: left; color: var(--ink); }
+    .table-numbering { margin: var(--ms1) 0 0; }
+    .table-numbering p { font-family: var(--mono); font-size: var(--ts13); color: var(--ink-faint); margin: 0; line-height: 1.5; max-width: 60ch; }
+
     /* ── Figure / plane diagram ───────────────────────────────────────── */
     .art-fig { margin: var(--ms3) 0; max-width: 66ch; }
     .charta svg { display: block; width: 100%; height: auto; max-width: 460px; margin: 0 auto; }
@@ -73,6 +83,10 @@
     .cosmos .k-input { color: var(--bone-muted); }
     .cosmos .k-input input { border-color: var(--bone-fainter); background: rgba(236,226,200,0.04); color: var(--bone); }
     .cosmos .k-input input:focus { border-color: var(--gold); }
+    .cosmos .pc-table th { color: var(--bone-faint); }
+    .cosmos .pc-table td { color: var(--bone-muted); }
+    .cosmos .pc-table th:first-child, .cosmos .pc-table td:first-child { color: var(--bone); }
+    .cosmos .table-numbering p { color: var(--bone-faint); }
   </style>
 </head>
 <body>
@@ -248,6 +262,49 @@
         <p>A last note is that, when looking at strain energy:</p>
         <p>\[U = \tfrac{1}{2}\,\mathbf{x}^{\mathsf{T}} \mathbf{K}\, \mathbf{x}\]</p>
         <p>It is always the smallest when \(\mathbf{x}\) lies on \(\mathbf{v}_1\) and the largest when on \(\mathbf{v}_2\) for the same length \(\mathbf{x}\) (\(\lVert \mathbf{x} \rVert\)). The eigenvector associated with the smallest eigenvalue gives the minimum strain energy while the largest eigenvalue gives the maximum strain energy. Therefore, for a perturbation or a stretch-and-release action on a system, the high energy demand (high eigenvalue) mode shape has the lowest contribution to how the system reacts. Ignoring them can still provide good approximations of system behaviour.</p>
+      </section>
+
+      <section>
+        <h3 class="num">Primary Component Analysis</h3>
+        <p>Consider a data set of 20 countries and we are looking at:</p>
+        <ul>
+          <li>GDP per capita (USD/people)</li>
+          <li>Population density (people/km²)</li>
+          <li>Urbanization (%)</li>
+          <li>Distance from equator (km)</li>
+          <li>HDI (index from 0 to 1)</li>
+        </ul>
+        <p>Principal Component Analysis, or PCA, is a method for finding the main independent directions of variation in a dataset. It illuminates new axes called principal components. These axes are weighted combinations of the original criteria. PC1 is the direction where the data varies the most. PC2 is the next strongest independent direction. Together, PC1 and PC2 often give a useful map of the design space.</p>
+        <p>PCA usually starts with a z-scoring step to normalise numbers with different scales and units. If data is normalised, a covariance matrix is created with</p>
+        <p>\[\mathrm{Cov}(x,y) = \frac{1}{n-1}\sum_{i=1}^{n}(x_i - \bar{x})(y_i - \bar{y})\]</p>
+        <div class="mat-eq">\[C = \begin{bmatrix}
+          \mathrm{Cov}(G,G) & \mathrm{Cov}(G,P) & \mathrm{Cov}(G,U) & \mathrm{Cov}(G,D) & \mathrm{Cov}(G,H) \\
+          \mathrm{Cov}(P,G) & \mathrm{Cov}(P,P) & \mathrm{Cov}(P,U) & \mathrm{Cov}(P,D) & \mathrm{Cov}(P,H) \\
+          \mathrm{Cov}(U,G) & \mathrm{Cov}(U,P) & \mathrm{Cov}(U,U) & \mathrm{Cov}(U,D) & \mathrm{Cov}(U,H) \\
+          \mathrm{Cov}(D,G) & \mathrm{Cov}(D,P) & \mathrm{Cov}(D,U) & \mathrm{Cov}(D,D) & \mathrm{Cov}(D,H) \\
+          \mathrm{Cov}(H,G) & \mathrm{Cov}(H,P) & \mathrm{Cov}(H,U) & \mathrm{Cov}(H,D) & \mathrm{Cov}(H,H)
+          \end{bmatrix}\]</div>
+        <p>Vectors G, P, U, D and H are the columns of the data (the criteria). Computing the eigenvalues and eigenvectors of the covariance matrix reveals the dominance of PCs and their directions. The percentage of an eigenvalue to the sum of all eigenvalues results in a contribution percentage of each PC. For this example the percentages are PC1: 60.4%, PC2: 20.7%, PC3: 10.2%, PC4: 6.6%, PC5: 2.0%. Looking at only the first two components explain the system with 81.1% accuracy, a major simplification for relatively good accuracy.</p>
+        <p>The eigenvectors are referred to as the PC loadings. They are the significant independent directions in a multidimensional cloud of data and show how moving in this direction affects each criteria. The loading weights for the example are:</p>
+        <figure class="art-table">
+          <table class="pc-table">
+            <thead>
+              <tr><th>Variable</th><th>PC1</th><th>PC2</th><th>PC3</th><th>PC4</th><th>PC5</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>GDP per capita</td><td>0.492</td><td>0.234</td><td>−0.353</td><td>−0.631</td><td>−0.426</td></tr>
+              <tr><td>Population density</td><td>−0.248</td><td>0.823</td><td>−0.380</td><td>0.340</td><td>−0.023</td></tr>
+              <tr><td>Urbanization %</td><td>0.476</td><td>−0.301</td><td>−0.339</td><td>0.675</td><td>−0.334</td></tr>
+              <tr><td>Distance from equator</td><td>0.412</td><td>0.402</td><td>0.772</td><td>0.175</td><td>−0.203</td></tr>
+              <tr><td>HDI</td><td>0.548</td><td>0.122</td><td>−0.142</td><td>0.001</td><td>0.815</td></tr>
+            </tbody>
+          </table>
+          <div class="table-numbering ref num" data-ref="pc-loadings" data-label="Table"><p>PC loadings (eigenvectors)</p></div>
+        </figure>
+        <p>PC1 shows that there is a good correlation between GDP per capita, urbanization %, HDI and the distance from the equator while there is an inverse correlation of population density. It is a primary vector through a complex multidimensional data set that separates highly developed, wealthy, urbanized countries from lower-income / lower-HDI countries. If this analysis was used to test a hypothesis that the country's development level correlates with its distance from the equator, this is a good substantiation.</p>
+        <p>PC2 separates dense countries from low-density countries, with some contribution from latitude. It is dominated by population density, distance from the equator and urbanization %, showing that more populated countries are not necessarily more urbanised. While PC1 is a country development axis, PC2 is a population-distribution axis. The benefit of having only two axes describing 81.1% of the data is that a simple scatter plot can be used to communicate most of the information of a very complex dataset.</p>
+        <div class="art-fig"><div class="charta pca-fig"></div></div>
+        <div class="figure-numbering ref num" data-fig="pca-scores" data-label="Figure"><p>Country PCA scores.</p></div>
       </section>
 
       <section>
@@ -438,6 +495,49 @@
         <p>A last note is that, when looking at strain energy:</p>
         <p>\[U = \tfrac{1}{2}\,\mathbf{x}^{\mathsf{T}} \mathbf{K}\, \mathbf{x}\]</p>
         <p>It is always the smallest when \(\mathbf{x}\) lies on \(\mathbf{v}_1\) and the largest when on \(\mathbf{v}_2\) for the same length \(\mathbf{x}\) (\(\lVert \mathbf{x} \rVert\)). The eigenvector associated with the smallest eigenvalue gives the minimum strain energy while the largest eigenvalue gives the maximum strain energy. Therefore, for a perturbation or a stretch-and-release action on a system, the high energy demand (high eigenvalue) mode shape has the lowest contribution to how the system reacts. Ignoring them can still provide good approximations of system behaviour.</p>
+      </section>
+
+      <section>
+        <h3 class="num">Primary Component Analysis</h3>
+        <p>Consider a data set of 20 countries and we are looking at:</p>
+        <ul>
+          <li>GDP per capita (USD/people)</li>
+          <li>Population density (people/km²)</li>
+          <li>Urbanization (%)</li>
+          <li>Distance from equator (km)</li>
+          <li>HDI (index from 0 to 1)</li>
+        </ul>
+        <p>Principal Component Analysis, or PCA, is a method for finding the main independent directions of variation in a dataset. It illuminates new axes called principal components. These axes are weighted combinations of the original criteria. PC1 is the direction where the data varies the most. PC2 is the next strongest independent direction. Together, PC1 and PC2 often give a useful map of the design space.</p>
+        <p>PCA usually starts with a z-scoring step to normalise numbers with different scales and units. If data is normalised, a covariance matrix is created with</p>
+        <p>\[\mathrm{Cov}(x,y) = \frac{1}{n-1}\sum_{i=1}^{n}(x_i - \bar{x})(y_i - \bar{y})\]</p>
+        <div class="mat-eq">\[C = \begin{bmatrix}
+          \mathrm{Cov}(G,G) & \mathrm{Cov}(G,P) & \mathrm{Cov}(G,U) & \mathrm{Cov}(G,D) & \mathrm{Cov}(G,H) \\
+          \mathrm{Cov}(P,G) & \mathrm{Cov}(P,P) & \mathrm{Cov}(P,U) & \mathrm{Cov}(P,D) & \mathrm{Cov}(P,H) \\
+          \mathrm{Cov}(U,G) & \mathrm{Cov}(U,P) & \mathrm{Cov}(U,U) & \mathrm{Cov}(U,D) & \mathrm{Cov}(U,H) \\
+          \mathrm{Cov}(D,G) & \mathrm{Cov}(D,P) & \mathrm{Cov}(D,U) & \mathrm{Cov}(D,D) & \mathrm{Cov}(D,H) \\
+          \mathrm{Cov}(H,G) & \mathrm{Cov}(H,P) & \mathrm{Cov}(H,U) & \mathrm{Cov}(H,D) & \mathrm{Cov}(H,H)
+          \end{bmatrix}\]</div>
+        <p>Vectors G, P, U, D and H are the columns of the data (the criteria). Computing the eigenvalues and eigenvectors of the covariance matrix reveals the dominance of PCs and their directions. The percentage of an eigenvalue to the sum of all eigenvalues results in a contribution percentage of each PC. For this example the percentages are PC1: 60.4%, PC2: 20.7%, PC3: 10.2%, PC4: 6.6%, PC5: 2.0%. Looking at only the first two components explain the system with 81.1% accuracy, a major simplification for relatively good accuracy.</p>
+        <p>The eigenvectors are referred to as the PC loadings. They are the significant independent directions in a multidimensional cloud of data and show how moving in this direction affects each criteria. The loading weights for the example are:</p>
+        <figure class="art-table">
+          <table class="pc-table">
+            <thead>
+              <tr><th>Variable</th><th>PC1</th><th>PC2</th><th>PC3</th><th>PC4</th><th>PC5</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>GDP per capita</td><td>0.492</td><td>0.234</td><td>−0.353</td><td>−0.631</td><td>−0.426</td></tr>
+              <tr><td>Population density</td><td>−0.248</td><td>0.823</td><td>−0.380</td><td>0.340</td><td>−0.023</td></tr>
+              <tr><td>Urbanization %</td><td>0.476</td><td>−0.301</td><td>−0.339</td><td>0.675</td><td>−0.334</td></tr>
+              <tr><td>Distance from equator</td><td>0.412</td><td>0.402</td><td>0.772</td><td>0.175</td><td>−0.203</td></tr>
+              <tr><td>HDI</td><td>0.548</td><td>0.122</td><td>−0.142</td><td>0.001</td><td>0.815</td></tr>
+            </tbody>
+          </table>
+          <div class="table-numbering ref num" data-ref="pc-loadings" data-label="Table"><p>PC loadings (eigenvectors)</p></div>
+        </figure>
+        <p>PC1 shows that there is a good correlation between GDP per capita, urbanization %, HDI and the distance from the equator while there is an inverse correlation of population density. It is a primary vector through a complex multidimensional data set that separates highly developed, wealthy, urbanized countries from lower-income / lower-HDI countries. If this analysis was used to test a hypothesis that the country's development level correlates with its distance from the equator, this is a good substantiation.</p>
+        <p>PC2 separates dense countries from low-density countries, with some contribution from latitude. It is dominated by population density, distance from the equator and urbanization %, showing that more populated countries are not necessarily more urbanised. While PC1 is a country development axis, PC2 is a population-distribution axis. The benefit of having only two axes describing 81.1% of the data is that a simple scatter plot can be used to communicate most of the information of a very complex dataset.</p>
+        <div class="art-fig"><div class="charta pca-fig"></div></div>
+        <div class="figure-numbering ref num" data-fig="pca-scores" data-label="Figure"><p>Country PCA scores.</p></div>
       </section>
 
       <section>
@@ -958,6 +1058,60 @@ function initModeShapes(p, isDark) {
   update();
 }
 
+// ── PCA scatter: PC1 (x) vs PC2 (y) for 20 countries ──────────
+var PCA_DATA = [
+  ['United States', 2.288, 0.035], ['Canada', 2.108, -0.030], ['Australia', 1.719, -0.822],
+  ['United Kingdom', 1.600, 1.827], ['Germany', 1.561, 1.558], ['France', 1.445, 0.459],
+  ['Spain', 1.010, 0.017], ['Japan', 0.770, 1.239], ['Saudi Arabia', 0.707, -1.076],
+  ['Argentina', 0.703, -1.103], ['Russia', 0.661, -0.215], ['Turkey', 0.100, -0.103],
+  ['Mexico', -0.517, -0.989], ['Brazil', -0.640, -1.790], ['China', -0.800, 0.166],
+  ['South Africa', -1.142, -0.809], ['Egypt', -2.140, 0.045], ['Indonesia', -2.417, -0.672],
+  ['India', -3.482, 2.184], ['Nigeria', -3.532, 0.079]
+];
+
+function renderPCA(container, isDark) {
+  container.innerHTML = '';
+  var W = 480, H = 380, mL = 34, mR = 16, mT = 18, mB = 34;
+  var svg = svgEl(container, 'svg', { viewBox: '0 0 ' + W + ' ' + H, preserveAspectRatio: 'xMidYMid meet' });
+  var grid = isDark ? 'rgba(236,226,200,0.10)' : 'rgba(28,22,16,0.08)';
+  var axis = isDark ? 'rgba(236,226,200,0.40)' : 'rgba(28,22,16,0.35)';
+  var tick = isDark ? 'rgba(236,226,200,0.55)' : 'rgba(28,22,16,0.5)';
+  var lab  = isDark ? 'rgba(236,226,200,0.62)' : 'rgba(28,22,16,0.58)';
+  var dotc = isDark ? '#d6ab5e' : '#8a3a13';
+  var xs = PCA_DATA.map(function (d) { return d[1]; }), ys = PCA_DATA.map(function (d) { return d[2]; });
+  var xmin = Math.min.apply(null, xs), xmax = Math.max.apply(null, xs);
+  var ymin = Math.min.apply(null, ys), ymax = Math.max.apply(null, ys);
+  var px = (xmax - xmin) * 0.10, py = (ymax - ymin) * 0.14;
+  xmin -= px; xmax += px; ymin -= py; ymax += py;
+  var pw = W - mL - mR, ph = H - mT - mB;
+  function X(v) { return mL + (v - xmin) / (xmax - xmin) * pw; }
+  function Y(v) { return mT + (ymax - v) / (ymax - ymin) * ph; }
+  var i;
+  for (i = Math.ceil(xmin); i <= Math.floor(xmax); i++) {
+    svgEl(svg, 'line', { x1: X(i), y1: mT, x2: X(i), y2: mT + ph, stroke: grid, 'stroke-width': 1 });
+    svgText(svg, X(i), mT + ph + 15, String(i), tick, 'middle', 10);
+  }
+  for (i = Math.ceil(ymin); i <= Math.floor(ymax); i++) {
+    svgEl(svg, 'line', { x1: mL, y1: Y(i), x2: mL + pw, y2: Y(i), stroke: grid, 'stroke-width': 1 });
+    svgText(svg, mL - 6, Y(i) + 3, String(i), tick, 'end', 10);
+  }
+  if (0 >= xmin && 0 <= xmax) svgEl(svg, 'line', { x1: X(0), y1: mT, x2: X(0), y2: mT + ph, stroke: axis, 'stroke-width': 1.4 });
+  if (0 >= ymin && 0 <= ymax) svgEl(svg, 'line', { x1: mL, y1: Y(0), x2: mL + pw, y2: Y(0), stroke: axis, 'stroke-width': 1.4 });
+  svgText(svg, mL + pw, mT + ph + 28, 'PC1', tick, 'end', 11);
+  svgText(svg, mL + 4, mT + 4, 'PC2', tick, 'start', 11);
+  var placed = [];
+  PCA_DATA.forEach(function (d) {
+    var cx = X(d[1]), cy = Y(d[2]);
+    svgEl(svg, 'circle', { cx: cx, cy: cy, r: 4, fill: dotc });
+    var right = cx < mL + pw * 0.6;
+    var lx = cx + (right ? 7 : -7), ly = cy - 5, guard = 0;
+    // nudge the label down while it would collide with an already-placed one
+    while (guard < 6 && placed.some(function (p) { return Math.abs(p.x - lx) < 56 && Math.abs(p.y - ly) < 11; })) { ly += 11; guard++; }
+    placed.push({ x: lx, y: ly });
+    svgText(svg, lx, ly, d[0], lab, right ? 'start' : 'end', 9.5);
+  });
+}
+
 (function () {
   var dark = (localStorage.getItem('sp-mode') === 'night');
   initEigen('alm', dark);   // almanac layer reflects the current daytime theme
@@ -966,6 +1120,10 @@ function initModeShapes(p, isDark) {
   initVec('cos', true);
   initModeShapes('alm', dark);
   initModeShapes('cos', true);
+  var pcaAlm = document.querySelector('#alm-layer .pca-fig');
+  var pcaCos = document.querySelector('#cos-layer .pca-fig');
+  if (pcaAlm) renderPCA(pcaAlm, dark);
+  if (pcaCos) renderPCA(pcaCos, true);
 })();
 </script>
 
