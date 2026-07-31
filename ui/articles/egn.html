@@ -175,12 +175,11 @@
         <h2 class="num">The Eigen Equation</h2>
         <p>Let \(\mathbf{A}\) be a square matrix. We are hunting for a non-zero vector \(\mathbf{v}\) and a scalar \(\lambda\) such that transforming \(\mathbf{v}\) by \(\mathbf{A}\) gives back the same vector, only rescaled:</p>
         <p>\[\mathbf{A}\mathbf{v} = \lambda \mathbf{v}\]</p>
-        <p>Read it slowly. The left-hand side, \(\mathbf{A}\mathbf{v}\), is the full transformation — it can rotate, shear and stretch. The right-hand side, \(\lambda\mathbf{v}\), is just the original vector multiplied by a number. The equation demands that, for this particular \(\mathbf{v}\), the two are identical. In other words, \(\mathbf{A}\) acting on \(\mathbf{v}\) is <em>pure scaling</em>: no rotation, no shear, just a change of length by the factor \(\lambda\).</p>
-        <div class="insight block ref num" data-label="Insight">
-          <h4></h4>
-          <p>An eigenvector \(\mathbf{v}\) marks a direction the matrix leaves untouched — every vector on that line stays on that line. The eigenvalue \(\lambda\) is the factor by which the matrix stretches it. A \(\lambda\) greater than 1 lengthens, between 0 and 1 shrinks, and a negative \(\lambda\) flips the vector to the opposite side while still keeping it on the same line.</p>
-        </div>
-        <p>Because \(\mathbf{v}\) only sets a direction, its length is arbitrary — if \(\mathbf{v}\) is an eigenvector then so is any multiple of it. That is why we speak of an eigen<em>direction</em>: a whole line through the origin that the matrix maps onto itself.</p>
+        <p>The left-hand side, \(\mathbf{A}\mathbf{v}\), is the full transformation — it can rotate, shear and stretch. The right-hand side, \(\lambda\mathbf{v}\), is just the original vector multiplied by a number. The equation demands that, for this particular \(\mathbf{v}\), the two are identical. In other words, \(\mathbf{A}\) acting on \(\mathbf{v}\) is pure scaling: no rotation, no shear, just a change of length by the factor \(\lambda\).</p>
+        <p>To find the special directions, rewrite the eigen equation with everything on one side:</p>
+        <p>\[\mathbf{A}\mathbf{v} - \lambda\mathbf{v} = \mathbf{0} \iff (\mathbf{A} - \lambda\mathbf{I})\mathbf{v} = \mathbf{0}\]</p>
+        <p>where \(\mathbf{I}\) is the identity matrix. We need a non-zero \(\mathbf{v}\) that the matrix \((\mathbf{A} - \lambda\mathbf{I})\) crushes to zero. That can only happen if the matrix is singular — if it collapses the plane — which means its determinant vanishes:</p>
+        <p>\[\det(\mathbf{A} - \lambda\mathbf{I}) = 0\]</p>
       </section>
 
       <section>
@@ -207,11 +206,7 @@
 
       <section>
         <h2 class="num">Solving for the Eigenpairs</h2>
-        <p>To find the special directions, rewrite the eigen equation with everything on one side:</p>
-        <p>\[\mathbf{A}\mathbf{v} - \lambda\mathbf{v} = \mathbf{0} \iff (\mathbf{A} - \lambda\mathbf{I})\mathbf{v} = \mathbf{0}\]</p>
-        <p>where \(\mathbf{I}\) is the identity matrix. We need a non-zero \(\mathbf{v}\) that the matrix \((\mathbf{A} - \lambda\mathbf{I})\) crushes to zero. That can only happen if the matrix is singular — if it collapses the plane — which means its determinant vanishes:</p>
-        <p>\[\det(\mathbf{A} - \lambda\mathbf{I}) = 0\]</p>
-        <p>For a \(2\times2\) matrix this expands into a tidy quadratic, the <em>characteristic equation</em>:</p>
+        <p>For a \(2\times2\) matrix, the determinant \(\det(\mathbf{A} - \lambda\mathbf{I})\) expands into a tidy quadratic, the <em>characteristic equation</em>:</p>
         <p>\[\det\begin{bmatrix} a-\lambda & b \\ c & d-\lambda \end{bmatrix} = (a-\lambda)(d-\lambda) - bc = \lambda^2 - (a+d)\,\lambda + (ad - bc) = 0\]</p>
         <p>The coefficients are two familiar quantities: the <em>trace</em> \(T = a + d\) (the sum down the diagonal) and the <em>determinant</em> \(D = ad - bc\). So the eigenvalues are simply the roots of</p>
         <p>\[\lambda^2 - T\lambda + D = 0 \quad\Longrightarrow\quad \lambda = \frac{T \pm \sqrt{T^2 - 4D}}{2}\]</p>
@@ -337,12 +332,11 @@
         <h2 class="num">The Eigen Equation</h2>
         <p>Let \(\mathbf{A}\) be a square matrix. We are hunting for a non-zero vector \(\mathbf{v}\) and a scalar \(\lambda\) such that transforming \(\mathbf{v}\) by \(\mathbf{A}\) gives back the same vector, only rescaled:</p>
         <p>\[\mathbf{A}\mathbf{v} = \lambda \mathbf{v}\]</p>
-        <p>Read it slowly. The left-hand side, \(\mathbf{A}\mathbf{v}\), is the full transformation — it can rotate, shear and stretch. The right-hand side, \(\lambda\mathbf{v}\), is just the original vector multiplied by a number. The equation demands that, for this particular \(\mathbf{v}\), the two are identical. In other words, \(\mathbf{A}\) acting on \(\mathbf{v}\) is <em>pure scaling</em>: no rotation, no shear, just a change of length by the factor \(\lambda\).</p>
-        <div class="insight block ref num" data-label="Insight">
-          <h4></h4>
-          <p>An eigenvector \(\mathbf{v}\) marks a direction the matrix leaves untouched — every vector on that line stays on that line. The eigenvalue \(\lambda\) is the factor by which the matrix stretches it. A \(\lambda\) greater than 1 lengthens, between 0 and 1 shrinks, and a negative \(\lambda\) flips the vector to the opposite side while still keeping it on the same line.</p>
-        </div>
-        <p>Because \(\mathbf{v}\) only sets a direction, its length is arbitrary — if \(\mathbf{v}\) is an eigenvector then so is any multiple of it. That is why we speak of an eigen<em>direction</em>: a whole line through the origin that the matrix maps onto itself.</p>
+        <p>The left-hand side, \(\mathbf{A}\mathbf{v}\), is the full transformation — it can rotate, shear and stretch. The right-hand side, \(\lambda\mathbf{v}\), is just the original vector multiplied by a number. The equation demands that, for this particular \(\mathbf{v}\), the two are identical. In other words, \(\mathbf{A}\) acting on \(\mathbf{v}\) is pure scaling: no rotation, no shear, just a change of length by the factor \(\lambda\).</p>
+        <p>To find the special directions, rewrite the eigen equation with everything on one side:</p>
+        <p>\[\mathbf{A}\mathbf{v} - \lambda\mathbf{v} = \mathbf{0} \iff (\mathbf{A} - \lambda\mathbf{I})\mathbf{v} = \mathbf{0}\]</p>
+        <p>where \(\mathbf{I}\) is the identity matrix. We need a non-zero \(\mathbf{v}\) that the matrix \((\mathbf{A} - \lambda\mathbf{I})\) crushes to zero. That can only happen if the matrix is singular — if it collapses the plane — which means its determinant vanishes:</p>
+        <p>\[\det(\mathbf{A} - \lambda\mathbf{I}) = 0\]</p>
       </section>
 
       <section>
@@ -369,11 +363,7 @@
 
       <section>
         <h2 class="num">Solving for the Eigenpairs</h2>
-        <p>To find the special directions, rewrite the eigen equation with everything on one side:</p>
-        <p>\[\mathbf{A}\mathbf{v} - \lambda\mathbf{v} = \mathbf{0} \iff (\mathbf{A} - \lambda\mathbf{I})\mathbf{v} = \mathbf{0}\]</p>
-        <p>where \(\mathbf{I}\) is the identity matrix. We need a non-zero \(\mathbf{v}\) that the matrix \((\mathbf{A} - \lambda\mathbf{I})\) crushes to zero. That can only happen if the matrix is singular — if it collapses the plane — which means its determinant vanishes:</p>
-        <p>\[\det(\mathbf{A} - \lambda\mathbf{I}) = 0\]</p>
-        <p>For a \(2\times2\) matrix this expands into a tidy quadratic, the <em>characteristic equation</em>:</p>
+        <p>For a \(2\times2\) matrix, the determinant \(\det(\mathbf{A} - \lambda\mathbf{I})\) expands into a tidy quadratic, the <em>characteristic equation</em>:</p>
         <p>\[\det\begin{bmatrix} a-\lambda & b \\ c & d-\lambda \end{bmatrix} = (a-\lambda)(d-\lambda) - bc = \lambda^2 - (a+d)\,\lambda + (ad - bc) = 0\]</p>
         <p>The coefficients are two familiar quantities: the <em>trace</em> \(T = a + d\) (the sum down the diagonal) and the <em>determinant</em> \(D = ad - bc\). So the eigenvalues are simply the roots of</p>
         <p>\[\lambda^2 - T\lambda + D = 0 \quad\Longrightarrow\quad \lambda = \frac{T \pm \sqrt{T^2 - 4D}}{2}\]</p>
