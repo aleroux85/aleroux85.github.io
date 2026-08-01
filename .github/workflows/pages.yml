@@ -8,12 +8,15 @@ name: Deploy to GitHub Pages
 #     - other branches  → build-check only, never deploys
 #
 #   anroleroux/staging.anroleroux    (STAGING)
-#     - other branches  → build `make dev`, deploy to staging.anroleroux.co.za
-#     - main            → promote: push HEAD to the production repo's main,
+#     - main + feature  → build `make dev`, deploy to staging.anroleroux.co.za
+#     - prod            → promote: push HEAD to the production repo's main,
 #                         which triggers the production deploy above
 #
+# Pushing to main only ever updates staging. Production is promoted by merging
+# main into the `prod` branch and pushing it.
+#
 # Keeping the file identical in both repos matters: promotion pushes staging's
-# main into prod's main, which carries this workflow file with it. If the two
+# prod into prod's main, which carries this workflow file with it. If the two
 # ever diverged, a promotion would overwrite prod's workflow.
 
 on:
@@ -68,10 +71,10 @@ jobs:
           SUPABASE_PUBLISHABLE_KEY: ${{ secrets.SUPABASE_PUBLISHABLE_KEY }}
         run: make prd
 
-  # STAGING repo, non-main branch → build the dev preview and deploy it to
-  # staging.anroleroux.co.za. No secrets: `make dev` is the offline build.
+  # STAGING repo, any branch except `prod` → build the dev preview and deploy
+  # it to staging.anroleroux.co.za. No secrets: `make dev` is the offline build.
   deploy-staging:
-    if: github.repository == 'anroleroux/staging.anroleroux' && github.ref != 'refs/heads/main'
+    if: github.repository == 'anroleroux/staging.anroleroux' && github.ref != 'refs/heads/prod'
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -92,14 +95,14 @@ jobs:
       - uses: actions/deploy-pages@v5
         id: deployment
 
-  # STAGING repo, main → promote to production by pushing to the prod repo's
-  # main. The prod repo's own workflow (deploy-prod above) then builds and
-  # deploys. Auth is a write-enabled deploy key registered on the prod repo,
+  # STAGING repo, `prod` branch → promote to production by pushing to the prod
+  # repo's main. The prod repo's own workflow (deploy-prod above) then builds
+  # and deploys. Auth is a write-enabled deploy key registered on the prod repo,
   # with its private half stored as the PROD_DEPLOY_KEY secret in this repo.
   # The push is a plain fast-forward; it will be rejected (not forced) if the
   # histories have diverged, which is a deliberate safety signal.
   promote-prod:
-    if: github.repository == 'anroleroux/staging.anroleroux' && github.ref == 'refs/heads/main'
+    if: github.repository == 'anroleroux/staging.anroleroux' && github.ref == 'refs/heads/prod'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
