@@ -137,14 +137,14 @@ let spScrubWrap = document.getElementById('sp-scrub-wrap');
 spSlider.addEventListener('input', function(e){ timeOverride = parseFloat(e.target.value); });
 spLiveBtn.addEventListener('click', function(){ timeOverride = null; });
 
-let spModeBtn = document.getElementById('sp-mode-btn');
-spModeBtn.addEventListener('click', function(){
-  if (modeOverride === null) modeOverride = 'day';
-  else if (modeOverride === 'day') modeOverride = 'night';
-  else modeOverride = null;
-  if (modeOverride) localStorage.setItem('sp-mode', modeOverride);
-  else localStorage.removeItem('sp-mode');
-  tick();
+let spModeBtns = document.querySelectorAll('.sp-mode-btn');
+spModeBtns.forEach(function(btn){
+  btn.addEventListener('click', function(){
+    modeOverride = btn.dataset.mode === 'auto' ? null : btn.dataset.mode;
+    if (modeOverride) localStorage.setItem('sp-mode', modeOverride);
+    else localStorage.removeItem('sp-mode');
+    tick();
+  });
 });
 
 let spRestore = document.getElementById('sp-restore');
@@ -265,9 +265,14 @@ function tick() {
   spLiveBtn.style.color = timeOverride == null ? accent : fgMute;
   spLiveBtn.textContent = timeOverride == null ? 'live' : 'snap to live';
 
-  spModeBtn.textContent = modeOverride === null ? 'auto' : modeOverride;
-  spModeBtn.style.color = modeOverride === null ? fgMute : accent;
-  spModeBtn.style.borderColor = border;
+  let activeMode = modeOverride === null ? 'auto' : modeOverride;
+  let activeBg   = dark ? 'rgba(214,171,94,0.14)' : 'rgba(138,58,19,0.10)';
+  spModeBtns.forEach(function(btn){
+    let on = btn.dataset.mode === activeMode;
+    btn.style.color       = on ? accent : fgMute;
+    btn.style.borderColor = on ? accent : border;
+    btn.style.background   = on ? activeBg : 'transparent';
+  });
   document.getElementById('sp-mode-wrap').style.borderTopColor = border;
 }
 
