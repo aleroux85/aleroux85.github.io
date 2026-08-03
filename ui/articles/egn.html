@@ -64,7 +64,7 @@
 
     /* ── Figure / plane diagram ───────────────────────────────────────── */
     .art-fig { margin: var(--ms3) 0; max-width: 66ch; }
-    .charta svg { display: block; width: 100%; height: auto; max-width: 460px; margin: 0 auto; }
+    .charta svg { display: block; width: 100%; height: auto; max-width: 600px; margin: 0 auto; }
     /* asy-fig is drag-interactive; stop the browser claiming the touch for scrolling */
     .asy-fig svg { touch-action: none; }
     .figure-numbering { margin: var(--ms1) 0 var(--ms3); }
@@ -91,9 +91,18 @@
     .cosmos .table-numbering p { color: var(--bone-faint); }
 
     /* ── Responsive ───────────────────────────────────────────────────── */
-    @media (max-width: 500px) {
+    @media (max-width: 540px) {
       .mat-eq { display: none; }
       .pc-table th:nth-child(n+4), .pc-table td:nth-child(n+4) { display: none; }
+      .pc-table th { padding-left: var(--ms-3); padding-right: var(--ms-3); }
+    }
+    @media (max-width: 800px) {
+      .pc-table th:nth-child(n+5), .pc-table td:nth-child(n+5) { display: none; }
+      .pc-table th { padding-left: var(--ms-3); padding-right: var(--ms-3); }
+    }
+    @media (max-width: 1000px) {
+      .mat-eq { font-size: var(--ts11);}
+      .pc-table th:nth-child(n+6), .pc-table td:nth-child(n+6) { display: none; }
       .pc-table th { padding-left: var(--ms-4); padding-right: var(--ms-4); }
     }
   </style>
@@ -144,7 +153,7 @@
   <div id="alm-layer" class="almanac">
 
     <nav class="alm-nav">
-      <a class="alm-brand" href="/">A·lR</a>
+      <a class="alm-brand" href="/">A·lR <em>— home</em></a>
       <div class="alm-edition">
         <span id="alm-date"></span>
       </div>
@@ -159,11 +168,11 @@
     <div class="art-meta-bar">
       <div class="art-meta-item">
         <span>published</span>
-        <span class="art-meta-val">2026-06-23</span>
+        <span class="art-meta-val">2026-08-01</span>
       </div>
       <div class="art-meta-item">
         <span>version</span>
-        <span class="art-meta-val">v0.1.0</span>
+        <span class="art-meta-val">1.0</span>
       </div>
       <div class="art-meta-item art-visits" hidden>
         <span>visits</span>
@@ -262,8 +271,8 @@
         <div class="mat-eq" id="alm-K-eq"></div>
         <p>The eigenvalues and eigenvectors are:</p>
         <div class="interactions">
-          <p>mode 1 — eigenvalue \(\lambda_1\): <span class="eig-val" id="alm-K-l1"></span>, eigenvector \(\mathbf{v}_1\): <span class="eig-val" id="alm-K-v1"></span></p>
-          <p>mode 2 — eigenvalue \(\lambda_2\): <span class="eig-val" id="alm-K-l2"></span>, eigenvector \(\mathbf{v}_2\): <span class="eig-val" id="alm-K-v2"></span></p>
+          <p>mode 1<br>eigenvalue \(\lambda_1\): <span class="eig-val" id="alm-K-l1"></span><br>eigenvector \(\mathbf{v}_1\): <span class="eig-val" id="alm-K-v1"></span></p>
+          <p>mode 2<br>eigenvalue \(\lambda_2\): <span class="eig-val" id="alm-K-l2"></span><br>eigenvector \(\mathbf{v}_2\): <span class="eig-val" id="alm-K-v2"></span></p>
         </div>
         <div class="art-fig"><div class="charta gridK-fig"></div></div>
         <div class="figure-numbering ref num" data-fig="grid-xform-K" data-label="Figure"><p>The matrix \(\mathbf{K}\) acting on a grid of points.</p></div>
@@ -388,7 +397,7 @@
     <svg class="cos-stars" viewBox="0 0 1440 2400" preserveAspectRatio="xMidYMid slice" aria-hidden="true"></svg>
 
     <nav class="cos-nav">
-      <a class="cos-brand" href="/">A · lR</a>
+      <a class="cos-brand" href="/">A·lR <em>— home</em></a>
       <div class="cos-nav-right">
         <span><span class="dot">●</span> now <span id="cos-time">00:00:00</span></span>
         <span id="cos-date">Jan 1 2026</span>
@@ -404,11 +413,11 @@
     <div class="art-meta-bar">
       <div class="art-meta-item">
         <span>published</span>
-        <span class="art-meta-val">2026-06-23</span>
+        <span class="art-meta-val">2026-08-01</span>
       </div>
       <div class="art-meta-item">
         <span>version</span>
-        <span class="art-meta-val">v0.1.0</span>
+        <span class="art-meta-val">1.0</span>
       </div>
       <div class="art-meta-item art-visits" hidden>
         <span>visits</span>
@@ -507,8 +516,8 @@
         <div class="mat-eq" id="cos-K-eq"></div>
         <p>The eigenvalues and eigenvectors are:</p>
         <div class="interactions">
-          <p>mode 1 — eigenvalue \(\lambda_1\): <span class="eig-val" id="cos-K-l1"></span>, eigenvector \(\mathbf{v}_1\): <span class="eig-val" id="cos-K-v1"></span></p>
-          <p>mode 2 — eigenvalue \(\lambda_2\): <span class="eig-val" id="cos-K-l2"></span>, eigenvector \(\mathbf{v}_2\): <span class="eig-val" id="cos-K-v2"></span></p>
+          <p>mode 1<br>eigenvalue \(\lambda_1\): <span class="eig-val" id="cos-K-l1"></span><br>eigenvector \(\mathbf{v}_1\): <span class="eig-val" id="cos-K-v1"></span></p>
+          <p>mode 2<br>eigenvalue \(\lambda_2\): <span class="eig-val" id="cos-K-l2"></span><br>eigenvector \(\mathbf{v}_2\): <span class="eig-val" id="cos-K-v2"></span></p>
         </div>
         <div class="art-fig"><div class="charta gridK-fig"></div></div>
         <div class="figure-numbering ref num" data-fig="grid-xform-K" data-label="Figure"><p>The matrix \(\mathbf{K}\) acting on a grid of points.</p></div>
