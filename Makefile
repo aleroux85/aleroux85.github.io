@@ -17,6 +17,7 @@ dev TRX: ui/home.html ui/dist/index.css ui/dist/index.js
 	@cp ui/unlog.html ui/dist/unlog.html
 	@cp ui/contact.html ui/dist/contact.html
 	@cp ui/articles/* ui/dist/
+	@cp ui/og.png ui/dist/og.png
 	@cp ui/robots.staging.txt ui/dist/robots.txt
 	@# Staging must never be indexed. Inject a noindex tag into every built
 	@# page (skipping any that already declare one) as a second layer behind
@@ -36,6 +37,7 @@ prd TRS: ui/home.html ui/dist/index.css ui/dist/index.js
 	@cp ui/unlog.html ui/dist/unlog.html
 	@cp ui/contact.html ui/dist/contact.html
 	@cp ui/articles/* ui/dist/
+	@cp ui/og.png ui/dist/og.png
 	@cp ui/robots.prod.txt ui/dist/robots.txt
 	@sh make/gen-sitemap.sh
 	@echo "anroleroux.co.za" > ui/dist/CNAME
