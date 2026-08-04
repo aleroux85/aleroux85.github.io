@@ -1,0 +1,6 @@
+# Staging — staging.anroleroux.co.za
+# Keep the staging domain out of search indexes; production is the
+# canonical site. Every page also carries a canonical link to the
+# production URL as a second line of defence.
+User-agent: *
+Disallow: /

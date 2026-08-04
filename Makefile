@@ -17,6 +17,7 @@ dev TRX: ui/home.html ui/dist/index.css ui/dist/index.js
 	@cp ui/unlog.html ui/dist/unlog.html
 	@cp ui/contact.html ui/dist/contact.html
 	@cp ui/articles/* ui/dist/
+	@cp ui/robots.staging.txt ui/dist/robots.txt
 	@echo "Built local dev version"
 
 .PHONY: prd TRS
@@ -27,6 +28,8 @@ prd TRS: ui/home.html ui/dist/index.css ui/dist/index.js
 	@cp ui/unlog.html ui/dist/unlog.html
 	@cp ui/contact.html ui/dist/contact.html
 	@cp ui/articles/* ui/dist/
+	@cp ui/robots.prod.txt ui/dist/robots.txt
+	@cp ui/sitemap.xml ui/dist/sitemap.xml
 	@echo "anroleroux.co.za" > ui/dist/CNAME
 	@echo "Built local dev version → dist/index.html"
 
