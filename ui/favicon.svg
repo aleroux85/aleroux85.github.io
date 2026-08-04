@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <rect width="32" height="32" fill="#07080d"/>
+  <!-- rays (top hemisphere) -->
+  <g stroke="#d6ab5e" stroke-width="1.5" stroke-linecap="round">
+    <line x1="16" y1="6.5" x2="16" y2="3"/>
+    <line x1="9.9" y1="8.1" x2="7.8" y2="5.3"/>
+    <line x1="22.1" y1="8.1" x2="24.2" y2="5.3"/>
+    <line x1="6.6" y1="13.2" x2="3.4" y2="11.9"/>
+    <line x1="25.4" y1="13.2" x2="28.6" y2="11.9"/>
+  </g>
+  <!-- sun disc -->
+  <circle cx="16" cy="14" r="6.4" fill="#d6ab5e"/>
+  <!-- horizon -->
+  <line x1="4" y1="24" x2="28" y2="24" stroke="#d6ab5e" stroke-opacity="0.55" stroke-width="1.8" stroke-linecap="round"/>
+</svg>

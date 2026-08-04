@@ -1,0 +1,5 @@
+# Production — anroleroux.co.za
+User-agent: *
+Allow: /
+
+Sitemap: https://anroleroux.co.za/sitemap.xml

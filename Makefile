@@ -17,6 +17,17 @@ dev TRX: ui/home.html ui/dist/index.css ui/dist/index.js
 	@cp ui/unlog.html ui/dist/unlog.html
 	@cp ui/contact.html ui/dist/contact.html
 	@cp ui/articles/* ui/dist/
+	@cp ui/og.png ui/dist/og.png
+	@cp ui/favicon.ico ui/favicon.svg ui/apple-touch-icon.png ui/dist/
+	@cp ui/robots.staging.txt ui/dist/robots.txt
+	@# Staging must never be indexed. Inject a noindex tag into every built
+	@# page (skipping any that already declare one) as a second layer behind
+	@# the Disallow-all robots.txt. This is applied only by `make dev`, so the
+	@# production build (`make prd`) never carries it.
+	@for f in ui/dist/*.html; do \
+		grep -q 'name="robots"' "$$f" || \
+		sed -i 's#\(<title>[^<]*</title>\)#\1\n  <meta name="robots" content="noindex, nofollow" />#' "$$f"; \
+	done
 	@echo "Built local dev version"
 
 .PHONY: prd TRS
@@ -27,6 +38,10 @@ prd TRS: ui/home.html ui/dist/index.css ui/dist/index.js
 	@cp ui/unlog.html ui/dist/unlog.html
 	@cp ui/contact.html ui/dist/contact.html
 	@cp ui/articles/* ui/dist/
+	@cp ui/og.png ui/dist/og.png
+	@cp ui/favicon.ico ui/favicon.svg ui/apple-touch-icon.png ui/dist/
+	@cp ui/robots.prod.txt ui/dist/robots.txt
+	@sh make/gen-sitemap.sh
 	@echo "anroleroux.co.za" > ui/dist/CNAME
 	@echo "Built local dev version → dist/index.html"
 
