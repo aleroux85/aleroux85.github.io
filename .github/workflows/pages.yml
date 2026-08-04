@@ -42,6 +42,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0   # full history so the sitemap can read per-file commit dates
 
       - name: Build prod version
         env:
@@ -64,6 +66,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0   # full history so the sitemap can read per-file commit dates
 
       - name: Build prod version (no deploy)
         env:

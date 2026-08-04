@@ -37,7 +37,7 @@ prd TRS: ui/home.html ui/dist/index.css ui/dist/index.js
 	@cp ui/contact.html ui/dist/contact.html
 	@cp ui/articles/* ui/dist/
 	@cp ui/robots.prod.txt ui/dist/robots.txt
-	@cp ui/sitemap.xml ui/dist/sitemap.xml
+	@sh make/gen-sitemap.sh
 	@echo "anroleroux.co.za" > ui/dist/CNAME
 	@echo "Built local dev version → dist/index.html"
 
