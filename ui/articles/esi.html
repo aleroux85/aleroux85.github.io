@@ -131,9 +131,9 @@
     </nav>
 
     <header class="art-hero">
-      <div class="art-eyebrow">§ work · mathematics</div>
+      <div class="art-eyebrow">article · mathematics</div>
       <h1 class="art-h1">The Complex <em>Exponential</em></h1>
-      <p class="art-lede">A single function, \(e^{st}\), carries both oscillation and growth at once. That is why it solves almost every linear differential equation — and why every equation of motion is written in its language.</p>
+      <p class="art-lede">A single function, \(e^{st}\), carries both oscillation and growth/decay at once. That is why it solves almost every linear differential equation — and why equations of motion are written in its language.</p>
     </header>
 
     <div class="art-meta-bar">
@@ -160,10 +160,10 @@
       </section>
 
       <section>
-        <h2 class="num">One Number, Two Behaviours</h2>
+        <h2 class="num">Euler's Formula</h2>
         <p>Let the exponent \(s\) be a complex number, \(s = \sigma + i\omega\). Split the exponential along its real and imaginary parts and Euler's formula does the rest:</p>
         <p>\[e^{st} = e^{(\sigma + i\omega)t} = \underbrace{e^{\sigma t}}_{\text{envelope}}\,\bigl(\underbrace{\cos\omega t + i\sin\omega t}_{\text{rotation}}\bigr)\]</p>
-        <p>Two knobs, two jobs. The <em>real part</em> \(\sigma\) drives the real exponential \(e^{\sigma t}\) — a pure envelope that swells when \(\sigma>0\), shrinks when \(\sigma<0\), and holds steady when \(\sigma=0\). The <em>imaginary part</em> \(\omega\) drives \(\cos\omega t + i\sin\omega t\) — a point spinning around the unit circle at angular rate \(\omega\). Multiply them and you get a vector whose length follows the envelope while its phase rotates: a spiral.</p>
+        <p>The real part \(\sigma\) drives the real exponential \(e^{\sigma t}\) — a pure envelope that swells when \(\sigma>0\), shrinks when \(\sigma<0\), and holds steady when \(\sigma=0\). The imaginary part \(\omega\) drives \(\cos\omega t + i\sin\omega t\) — a point spinning around the unit circle at angular rate \(\omega\). Multiply them and you get a vector whose length follows the envelope while its phase rotates: a spiral.</p>
         <div class="insight block ref num" data-label="Insight">
           <h4></h4>
           <p>The whole of \(s\) lives in one picture, the <em>complex \(s\)-plane</em>. Horizontal position is \(\sigma\) (growth or decay); vertical position is \(\omega\) (rate of oscillation). Slide \(s\) right and the response runs away; slide it left and the response dies out; sit it on the vertical axis and you get a pure, undying oscillation. Every distinct motion of a linear system is just a point — or a pair of points — somewhere on this plane.</p>
@@ -171,9 +171,8 @@
       </section>
 
       <section>
-        <h2 class="num">Watch It Circle the Time Axis</h2>
-        <p>The clearest way to feel this is to plot \(e^{st}\) in three dimensions. Run time \(t\) along the longitudinal axis, and let the real and imaginary parts of \(e^{st}\) spread out into the two transverse directions. The curve \(\bigl(t,\ e^{\sigma t}\cos\omega t,\ e^{\sigma t}\sin\omega t\bigr)\) corkscrews around the time axis — rotating because of \(\omega\), while its distance from the axis is the exponential envelope \(e^{\sigma t}\) (drawn dashed).</p>
-        <p>Drag the point \(s\) around the plane on the left and watch the spiral on the right respond. Push it right to make the spiral flare open; pull it left to make it wind down to nothing; raise or lower it to wind the turns tighter or looser; drop it onto the real axis to kill the rotation entirely.</p>
+        <h2 class="num">Demonstration</h2>
+        <p>To demonstrate this, \(e^{st}\) is plotted in three dimensions. Time \(t\) runs along the longitudinal axis, and the real and imaginary parts of \(e^{st}\) spread out into the two transverse directions. The curve \(\bigl(t,\ e^{\sigma t}\cos\omega t,\ e^{\sigma t}\sin\omega t\bigr)\) corkscrews around the time axis — rotating because of \(\omega\), while its distance from the axis is the exponential envelope \(e^{\sigma t}\) (drawn dashed). Drag the point on the s-plane in <span class="figure-number" data-fid="esi-plot">figure</span>.</p>
         <div class="art-fig">
           <div class="esi-stage">
             <div class="charta splane-fig"></div>
@@ -182,7 +181,7 @@
             <div class="charta sideview-fig"></div>
           </div>
         </div>
-        <div class="figure-numbering ref num" data-fig="esi-spiral" data-label="Figure"><p>Drag \(s = \sigma + i\omega\) on the complex \(s\)-plane (top-left). The other three panels redraw the same \(e^{st}\): the 3D spiral around the time axis (top-right), the end-on view looking straight down the time axis — a flat spiral in the \(\mathrm{Re}\)–\(\mathrm{Im}\) plane (bottom-left), and the side view of its real part \(e^{\sigma t}\cos\omega t\) with the envelope \(\pm e^{\sigma t}\) (dashed, bottom-right).</p></div>
+        <div class="figure-numbering ref num" data-fig="esi-plot" data-label="Figure"><p>Drag \(s = \sigma + i\omega\) on the complex \(s\)-plane (top-left). The other three panels redraw the same \(e^{st}\): the 3D spiral around the time axis (top-right), the end-on view looking straight down the time axis — a flat spiral in the \(\mathrm{Re}\)–\(\mathrm{Im}\) plane (bottom-left), and the side view of its real part \(e^{\sigma t}\cos\omega t\) with the envelope \(\pm e^{\sigma t}\) (dashed, bottom-right).</p></div>
         <div class="interactions">
           <p>real part \(\sigma\): <span class="esi-val" id="alm-out-sigma"></span></p>
           <p>imaginary part \(\omega\): <span class="esi-val" id="alm-out-omega"></span></p>
@@ -192,10 +191,10 @@
       </section>
 
       <section>
-        <h2 class="num">Why Differential Equations Love It</h2>
-        <p>The reason \(e^{st}\) is everywhere is one line of calculus: differentiating it just multiplies it by \(s\).</p>
+        <h2 class="num">Application in Differential Equations</h2>
+        <p>The reason \(e^{st}\) is a good fit for solving differential equations is that differentiating it just multiplies it by \(s\).</p>
         <p>\[\frac{d}{dt}\,e^{st} = s\,e^{st}\]</p>
-        <p>The function is its own derivative, up to a constant — it is an <em>eigenfunction</em> of the derivative. So when you feed \(e^{st}\) into any linear constant-coefficient differential equation, every derivative turns into a power of \(s\), and the calculus collapses into ordinary algebra. The equation of motion of a damped spring–mass system,</p>
+        <p>The function is its own derivative, up to a constant — it is an eigenfunction of the derivative. So when you feed \(e^{st}\) into any linear constant-coefficient differential equation, every derivative turns into a power of \(s\), and the calculus collapses into ordinary algebra. The equation of motion of a damped spring–mass system,</p>
         <p>\[m\ddot{x} + c\dot{x} + kx = 0,\]</p>
         <p>becomes, on substituting \(x = e^{st}\), the simple polynomial \(\,ms^2 + cs + k = 0\). Its roots are exactly the values of \(s\) the system is allowed to move at — the points you have been dragging on the plane. A negative real part means the motion decays; an imaginary part means it rings; together they describe every free response the system can have.</p>
       </section>
@@ -234,9 +233,9 @@
     </nav>
 
     <header class="art-hero">
-      <div class="art-eyebrow">§ work · mathematics</div>
+      <div class="art-eyebrow">article · mathematics</div>
       <h1 class="art-h1">The Complex <em>Exponential</em></h1>
-      <p class="art-lede">A single function, \(e^{st}\), carries both oscillation and growth at once. That is why it solves almost every linear differential equation — and why every equation of motion is written in its language.</p>
+      <p class="art-lede">A single function, \(e^{st}\), carries both oscillation and growth/decay at once. That is why it solves almost every linear differential equation — and why equations of motion are written in its language.</p>
     </header>
 
     <div class="art-meta-bar">
@@ -263,10 +262,10 @@
       </section>
 
       <section>
-        <h2 class="num">One Number, Two Behaviours</h2>
+        <h2 class="num">Euler's Formula</h2>
         <p>Let the exponent \(s\) be a complex number, \(s = \sigma + i\omega\). Split the exponential along its real and imaginary parts and Euler's formula does the rest:</p>
         <p>\[e^{st} = e^{(\sigma + i\omega)t} = \underbrace{e^{\sigma t}}_{\text{envelope}}\,\bigl(\underbrace{\cos\omega t + i\sin\omega t}_{\text{rotation}}\bigr)\]</p>
-        <p>Two knobs, two jobs. The <em>real part</em> \(\sigma\) drives the real exponential \(e^{\sigma t}\) — a pure envelope that swells when \(\sigma>0\), shrinks when \(\sigma<0\), and holds steady when \(\sigma=0\). The <em>imaginary part</em> \(\omega\) drives \(\cos\omega t + i\sin\omega t\) — a point spinning around the unit circle at angular rate \(\omega\). Multiply them and you get a vector whose length follows the envelope while its phase rotates: a spiral.</p>
+        <p>The real part \(\sigma\) drives the real exponential \(e^{\sigma t}\) — a pure envelope that swells when \(\sigma>0\), shrinks when \(\sigma<0\), and holds steady when \(\sigma=0\). The imaginary part \(\omega\) drives \(\cos\omega t + i\sin\omega t\) — a point spinning around the unit circle at angular rate \(\omega\). Multiply them and you get a vector whose length follows the envelope while its phase rotates: a spiral.</p>
         <div class="insight block ref num" data-label="Insight">
           <h4></h4>
           <p>The whole of \(s\) lives in one picture, the <em>complex \(s\)-plane</em>. Horizontal position is \(\sigma\) (growth or decay); vertical position is \(\omega\) (rate of oscillation). Slide \(s\) right and the response runs away; slide it left and the response dies out; sit it on the vertical axis and you get a pure, undying oscillation. Every distinct motion of a linear system is just a point — or a pair of points — somewhere on this plane.</p>
@@ -274,9 +273,8 @@
       </section>
 
       <section>
-        <h2 class="num">Watch It Circle the Time Axis</h2>
-        <p>The clearest way to feel this is to plot \(e^{st}\) in three dimensions. Run time \(t\) along the longitudinal axis, and let the real and imaginary parts of \(e^{st}\) spread out into the two transverse directions. The curve \(\bigl(t,\ e^{\sigma t}\cos\omega t,\ e^{\sigma t}\sin\omega t\bigr)\) corkscrews around the time axis — rotating because of \(\omega\), while its distance from the axis is the exponential envelope \(e^{\sigma t}\) (drawn dashed).</p>
-        <p>Drag the point \(s\) around the plane on the left and watch the spiral on the right respond. Push it right to make the spiral flare open; pull it left to make it wind down to nothing; raise or lower it to wind the turns tighter or looser; drop it onto the real axis to kill the rotation entirely.</p>
+        <h2 class="num">Demonstration</h2>
+        <p>To demonstrate this, \(e^{st}\) is plotted in three dimensions. Time \(t\) runs along the longitudinal axis, and the real and imaginary parts of \(e^{st}\) spread out into the two transverse directions. The curve \(\bigl(t,\ e^{\sigma t}\cos\omega t,\ e^{\sigma t}\sin\omega t\bigr)\) corkscrews around the time axis — rotating because of \(\omega\), while its distance from the axis is the exponential envelope \(e^{\sigma t}\) (drawn dashed). Drag the point on the s-plane in <span class="figure-number" data-fid="esi-plot">figure</span>.</p>
         <div class="art-fig">
           <div class="esi-stage">
             <div class="charta splane-fig"></div>
@@ -285,7 +283,7 @@
             <div class="charta sideview-fig"></div>
           </div>
         </div>
-        <div class="figure-numbering ref num" data-fig="esi-spiral" data-label="Figure"><p>Drag \(s = \sigma + i\omega\) on the complex \(s\)-plane (top-left). The other three panels redraw the same \(e^{st}\): the 3D spiral around the time axis (top-right), the end-on view looking straight down the time axis — a flat spiral in the \(\mathrm{Re}\)–\(\mathrm{Im}\) plane (bottom-left), and the side view of its real part \(e^{\sigma t}\cos\omega t\) with the envelope \(\pm e^{\sigma t}\) (dashed, bottom-right).</p></div>
+        <div class="figure-numbering ref num" data-fig="esi-plot" data-label="Figure"><p>Drag \(s = \sigma + i\omega\) on the complex \(s\)-plane (top-left). The other three panels redraw the same \(e^{st}\): the 3D spiral around the time axis (top-right), the end-on view looking straight down the time axis — a flat spiral in the \(\mathrm{Re}\)–\(\mathrm{Im}\) plane (bottom-left), and the side view of its real part \(e^{\sigma t}\cos\omega t\) with the envelope \(\pm e^{\sigma t}\) (dashed, bottom-right).</p></div>
         <div class="interactions">
           <p>real part \(\sigma\): <span class="esi-val" id="cos-out-sigma"></span></p>
           <p>imaginary part \(\omega\): <span class="esi-val" id="cos-out-omega"></span></p>
@@ -295,10 +293,10 @@
       </section>
 
       <section>
-        <h2 class="num">Why Differential Equations Love It</h2>
-        <p>The reason \(e^{st}\) is everywhere is one line of calculus: differentiating it just multiplies it by \(s\).</p>
+        <h2 class="num">Application in Differential Equations</h2>
+        <p>The reason \(e^{st}\) is a good fit for solving differential equations is that differentiating it just multiplies it by \(s\).</p>
         <p>\[\frac{d}{dt}\,e^{st} = s\,e^{st}\]</p>
-        <p>The function is its own derivative, up to a constant — it is an <em>eigenfunction</em> of the derivative. So when you feed \(e^{st}\) into any linear constant-coefficient differential equation, every derivative turns into a power of \(s\), and the calculus collapses into ordinary algebra. The equation of motion of a damped spring–mass system,</p>
+        <p>The function is its own derivative, up to a constant — it is an eigenfunction of the derivative. So when you feed \(e^{st}\) into any linear constant-coefficient differential equation, every derivative turns into a power of \(s\), and the calculus collapses into ordinary algebra. The equation of motion of a damped spring–mass system,</p>
         <p>\[m\ddot{x} + c\dot{x} + kx = 0,\]</p>
         <p>becomes, on substituting \(x = e^{st}\), the simple polynomial \(\,ms^2 + cs + k = 0\). Its roots are exactly the values of \(s\) the system is allowed to move at — the points you have been dragging on the plane. A negative real part means the motion decays; an imaginary part means it rings; together they describe every free response the system can have.</p>
       </section>
