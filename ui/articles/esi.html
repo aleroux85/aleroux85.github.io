@@ -644,8 +644,7 @@ function initESI(p, isDark) {
 }
 
 (function () {
-  var dark = (localStorage.getItem('sp-mode') === 'night');
-  initESI('alm', dark);   // almanac layer reflects the current daytime theme
+  initESI('alm', false);  // almanac layer is always the light theme
   initESI('cos', true);   // cosmos layer is always dark
 })();
 </script>
